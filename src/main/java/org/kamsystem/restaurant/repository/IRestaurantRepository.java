@@ -1,0 +1,15 @@
+package org.kamsystem.restaurant.repository;
+
+import java.util.List;
+import org.kamsystem.restaurant.model.Restaurant;
+
+public interface IRestaurantRepository {
+
+    void saveRestaurant(Restaurant restaurant);
+
+    void updateRestaurant(Restaurant restaurant);
+
+    List<Restaurant> getRestaurantByCreator(Long createdBy);
+
+    Restaurant getRestaurantById(Long id);
+}
