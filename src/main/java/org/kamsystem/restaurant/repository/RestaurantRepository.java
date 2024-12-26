@@ -28,16 +28,14 @@ public class RestaurantRepository implements IRestaurantRepository {
     private static final String SELECT_RESTAURANT_BY_ID = "SELECT id, restaurant_name, "
         + " pincode, city, state, address, created_by FROM restaurant WHERE id = :id";
 
+    private static final String UPDATE_RESTAURANT = "UPDATE restaurant SET "
+        + "restaurant_name = :name, pincode = :pincode, city = :city, state = :state, address = :address, updated_at = now() WHERE id = :id";
+
     @Override
     public void createRestaurant(Restaurant restaurant) {
-        final MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("name", restaurant.getName());
-        mapSqlParameterSource.addValue("pincode", restaurant.getPincode());
-        mapSqlParameterSource.addValue("city", restaurant.getCity());
-        mapSqlParameterSource.addValue("state", restaurant.getState());
-        mapSqlParameterSource.addValue("address", restaurant.getAddress());
+        MapSqlParameterSource mapSqlParameterSource = formParamSource(restaurant);
         mapSqlParameterSource.addValue("createdBy", restaurant.getCreatedBy());
-        try{
+        try {
             namedParameterJdbcTemplate.update(INSERT_RESTAURANT, mapSqlParameterSource);
         } catch (Exception e) {
             throw new RestaurantException(RestaurantErrorCode.RESTAURANT_CREATION_FAILED, e.getMessage());
@@ -46,39 +44,10 @@ public class RestaurantRepository implements IRestaurantRepository {
 
     @Override
     public void updateRestaurant(Restaurant restaurant) {
-        StringBuilder updateRestaurant = new StringBuilder("UPDATE restaurant SET ");
-        final MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-
-        if (restaurant.getName() != null) {
-            updateRestaurant.append("restaurant_name = :name, ");
-            mapSqlParameterSource.addValue("name", restaurant.getName());
-        }
-        if (restaurant.getPincode() != null) {
-            updateRestaurant.append("pincode = :pincode, ");
-            mapSqlParameterSource.addValue("pincode", restaurant.getPincode());
-        }
-        if (restaurant.getCity() != null) {
-            updateRestaurant.append("city = :city, ");
-            mapSqlParameterSource.addValue("city", restaurant.getCity());
-        }
-        if (restaurant.getState() != null) {
-            updateRestaurant.append("state = :state, ");
-            mapSqlParameterSource.addValue("state", restaurant.getState());
-        }
-        if (restaurant.getAddress() != null) {
-            updateRestaurant.append("address = :address, ");
-            mapSqlParameterSource.addValue("address", restaurant.getAddress());
-        }
-        if (restaurant.getCreatedBy() != null) {
-            updateRestaurant.append("created_by = :createdBy, ");
-            mapSqlParameterSource.addValue("createdBy", restaurant.getCreatedBy());
-        }
-        updateRestaurant.append(" updated_at = now() ");
-        updateRestaurant.append(" WHERE id = :id");
+        MapSqlParameterSource mapSqlParameterSource = formParamSource(restaurant);
         mapSqlParameterSource.addValue("id", restaurant.getId());
-
-        try{
-            namedParameterJdbcTemplate.update(updateRestaurant.toString(), mapSqlParameterSource);
+        try {
+            namedParameterJdbcTemplate.update(UPDATE_RESTAURANT, mapSqlParameterSource);
         } catch (Exception e) {
             throw new RestaurantException(RestaurantErrorCode.RESTAURANT_UPDATE_FAILED, e.getMessage());
         }
@@ -108,6 +77,17 @@ public class RestaurantRepository implements IRestaurantRepository {
             throw new RestaurantException(RestaurantErrorCode.RESTAURANT_NOT_FOUND, e.getMessage());
         }
         return null;
+    }
+
+    private MapSqlParameterSource formParamSource(Restaurant restaurant) {
+        final MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+
+        mapSqlParameterSource.addValue("name", restaurant.getName());
+        mapSqlParameterSource.addValue("pincode", restaurant.getPincode());
+        mapSqlParameterSource.addValue("city", restaurant.getCity());
+        mapSqlParameterSource.addValue("state", restaurant.getState());
+        mapSqlParameterSource.addValue("address", restaurant.getAddress());
+        return mapSqlParameterSource;
     }
 
     private Restaurant transformResultSetToRestaurant(ResultSet rs) throws SQLException {
