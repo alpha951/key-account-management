@@ -144,3 +144,8 @@ CREATE TABLE IF NOT EXISTS "kam_change_log"
     "new_kam_id"  BIGINT,
     "change_date" TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+
+ALTER TABLE public.kam_user ADD CONSTRAINT kam_user_unique_mobile UNIQUE (mobile);
+ALTER TABLE public.kam_user ADD CONSTRAINT kam_user_unique_email UNIQUE (email);
+ALTER TABLE public.kam_user ADD CONSTRAINT kam_user_unique_employee UNIQUE (employee_id);

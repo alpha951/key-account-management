@@ -30,7 +30,7 @@ public class KamUserController {
             return new ResponseEntity<>(new ApiResponse<>(false, result.getAllErrors()), HttpStatus.BAD_REQUEST);
         }
         kamUserService.createUser(kamUser);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(new ApiResponse<>(true, "User created successfully"), HttpStatus.OK);
     }
 
     @UserAuth(allowedFor = UserRole.SUPER_ADMIN)
@@ -41,6 +41,6 @@ public class KamUserController {
             return new ResponseEntity<>(new ApiResponse<>(false, result.getAllErrors()), HttpStatus.BAD_REQUEST);
         }
         kamUserService.updateUserRole(kamUserUpdateModel);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(new ApiResponse<>(true, "User role updated successfully"), HttpStatus.OK);
     }
 }

@@ -3,81 +3,86 @@ package org.kamsystem.restaurant.repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import org.kamsystem.restaurant.exception.RestaurantErrorCode;
-import org.kamsystem.restaurant.exception.RestaurantException;
+import lombok.AllArgsConstructor;
 import org.kamsystem.restaurant.model.Restaurant;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@AllArgsConstructor
 public class RestaurantRepository implements IRestaurantRepository {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    public RestaurantRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-    }
 
     private static final String INSERT_RESTAURANT = "INSERT INTO restaurant "
         + "(restaurant_name, pincode, city, state, address, created_by) VALUES (:name, :pincode, :city, :state, :address, :createdBy)";
 
     private static final String SELECT_RESTAURANT_BY_CREATOR = "SELECT id, restaurant_name, "
-        + " pincode, city, state, address, created_by FROM restaurant WHERE created_by = :createdBy";
+        + " pincode, city, state, address, created_by, created_at, updated_at FROM restaurant WHERE created_by = :createdBy";
 
     private static final String SELECT_RESTAURANT_BY_ID = "SELECT id, restaurant_name, "
-        + " pincode, city, state, address, created_by FROM restaurant WHERE id = :id";
+        + " pincode, city, state, address, created_by, created_at, updated_at FROM restaurant WHERE id = :id";
 
     private static final String UPDATE_RESTAURANT = "UPDATE restaurant SET "
         + "restaurant_name = :name, pincode = :pincode, city = :city, state = :state, address = :address, updated_at = now() WHERE id = :id";
+
+    private static final String GET_ALL_RESTAURANTS = "SELECT id, restaurant_name, "
+        + " pincode, city, state, address, created_by, created_at, updated_at FROM restaurant";
+
+    private static final String GET_RESTAURANT_BY_RESTAURANT_ID_AND_CREATOR_ID = "SELECT id, "
+        + "restaurant_name, "
+        + " pincode, city, state, address, created_by, created_at, "
+        + "updated_at FROM restaurant WHERE id = :id AND created_by = :createdBy";
 
     @Override
     public void createRestaurant(Restaurant restaurant) {
         MapSqlParameterSource mapSqlParameterSource = formParamSource(restaurant);
         mapSqlParameterSource.addValue("createdBy", restaurant.getCreatedBy());
-        try {
-            namedParameterJdbcTemplate.update(INSERT_RESTAURANT, mapSqlParameterSource);
-        } catch (Exception e) {
-            throw new RestaurantException(RestaurantErrorCode.RESTAURANT_CREATION_FAILED, e.getMessage());
-        }
+        namedParameterJdbcTemplate.update(INSERT_RESTAURANT, mapSqlParameterSource);
     }
 
     @Override
     public void updateRestaurant(Restaurant restaurant) {
         MapSqlParameterSource mapSqlParameterSource = formParamSource(restaurant);
         mapSqlParameterSource.addValue("id", restaurant.getId());
-        try {
-            namedParameterJdbcTemplate.update(UPDATE_RESTAURANT, mapSqlParameterSource);
-        } catch (Exception e) {
-            throw new RestaurantException(RestaurantErrorCode.RESTAURANT_UPDATE_FAILED, e.getMessage());
-        }
+        namedParameterJdbcTemplate.update(UPDATE_RESTAURANT, mapSqlParameterSource);
     }
 
     @Override
     public List<Restaurant> getRestaurantByCreator(Long createdBy) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("id", createdBy);
-        try {
-            namedParameterJdbcTemplate.query(SELECT_RESTAURANT_BY_CREATOR, mapSqlParameterSource,
-                (rs, rowNum) -> transformResultSetToRestaurant(rs));
-        } catch (Exception e) {
-            throw new RestaurantException(RestaurantErrorCode.RESTAURANT_CREATOR_NOT_FOUND, e.getMessage());
-        }
-        return List.of();
+
+        return namedParameterJdbcTemplate.query(SELECT_RESTAURANT_BY_CREATOR, mapSqlParameterSource,
+            (rs, rowNum) -> transformResultSetToRestaurant(rs));
     }
 
     @Override
     public Restaurant getRestaurantById(Long id) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("id", id);
-        try {
-            namedParameterJdbcTemplate.queryForObject(SELECT_RESTAURANT_BY_ID, mapSqlParameterSource,
-                (rs, rowNum) -> transformResultSetToRestaurant(rs));
-        } catch (Exception e) {
-            throw new RestaurantException(RestaurantErrorCode.RESTAURANT_NOT_FOUND, e.getMessage());
-        }
-        return null;
+        return namedParameterJdbcTemplate.queryForObject(SELECT_RESTAURANT_BY_ID, mapSqlParameterSource,
+            (rs, rowNum) -> transformResultSetToRestaurant(rs));
     }
+
+    @Override
+    public List<Restaurant> getAllRestaurants() {
+        final MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        return namedParameterJdbcTemplate.query(GET_ALL_RESTAURANTS, mapSqlParameterSource,
+            (rs, rowNum) -> transformResultSetToRestaurant(rs));
+    }
+
+    @Override
+    public Restaurant getRestaurantByIdAndCreatorId(Long restaurantId, Long userId) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("id", restaurantId);
+        mapSqlParameterSource.addValue("createdBy", userId);
+        return namedParameterJdbcTemplate.queryForObject(GET_RESTAURANT_BY_RESTAURANT_ID_AND_CREATOR_ID,
+            mapSqlParameterSource,
+            (rs, rowNum) -> transformResultSetToRestaurant(rs));
+    }
+
 
     private MapSqlParameterSource formParamSource(Restaurant restaurant) {
         final MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
@@ -99,6 +104,8 @@ public class RestaurantRepository implements IRestaurantRepository {
         restaurant.setState(rs.getString("state"));
         restaurant.setAddress(rs.getString("address"));
         restaurant.setCreatedBy(rs.getLong("created_by"));
+        restaurant.setCreatedAt(String.valueOf(rs.getTimestamp("created_at").toLocalDateTime()));
+        restaurant.setUpdatedAt(String.valueOf(rs.getTimestamp("updated_at").toLocalDateTime()));
         return restaurant;
     }
 }

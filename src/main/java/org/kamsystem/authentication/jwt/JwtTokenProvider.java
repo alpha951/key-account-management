@@ -19,9 +19,9 @@ public class JwtTokenProvider {
         this.webappConfig = webappConfig;
     }
 
-    public String generateToken(String mobile, UserRole role) {
+    public String generateToken(Long userId, UserRole role) {
         return Jwts.builder()
-            .setSubject(mobile)
+            .setSubject(String.valueOf(userId))
             .claim("role", role.name())
             .setIssuedAt(new Date())
             .setExpiration(new Date(System.currentTimeMillis() + webappConfig.getExpirationTime()))
@@ -29,7 +29,7 @@ public class JwtTokenProvider {
             .compact();
     }
 
-    public String getMobileFromToken(String token) {
+    public String getUserIdFromToken(String token) {
         return Jwts.parserBuilder()
             .setSigningKey(getSecretKey(webappConfig.getSecretKey()))
             .build()

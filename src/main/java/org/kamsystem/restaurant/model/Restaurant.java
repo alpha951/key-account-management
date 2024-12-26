@@ -24,4 +24,6 @@ public class Restaurant {
     @NonNull
     private String address;
     private Long createdBy;
+    private String createdAt;
+    private String updatedAt;
 }

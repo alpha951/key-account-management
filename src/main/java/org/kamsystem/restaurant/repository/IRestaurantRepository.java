@@ -12,4 +12,8 @@ public interface IRestaurantRepository {
     List<Restaurant> getRestaurantByCreator(Long createdBy);
 
     Restaurant getRestaurantById(Long id);
+
+    List<Restaurant> getAllRestaurants();
+
+    Restaurant getRestaurantByIdAndCreatorId(Long restaurantId, Long userId);
 }

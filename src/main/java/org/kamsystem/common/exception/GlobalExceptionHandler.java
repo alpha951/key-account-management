@@ -16,7 +16,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 @ControllerAdvice
 @Slf4j
-public class GlobalException {
+public class GlobalExceptionHandler {
 
     /**
      * Handle all exceptions that are not handled in the controller or on the global level

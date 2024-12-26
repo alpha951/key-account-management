@@ -26,12 +26,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         throws ServletException, IOException {
         String token = getTokenFromRequest(request);
         if (token != null && jwtTokenProvider.validateToken(token)) {
-            String mobile = jwtTokenProvider.getMobileFromToken(token);
+            String userId = jwtTokenProvider.getUserIdFromToken(token);
             String role = jwtTokenProvider.getRoleFromToken(token);
-
             // Set Authentication in SecurityContext
             SecurityContextHolder.getContext().setAuthentication(
-                new UsernamePasswordAuthenticationToken(mobile, null,
+                new UsernamePasswordAuthenticationToken(userId, null,
                     List.of(new SimpleGrantedAuthority(role)))
             );
         }

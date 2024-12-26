@@ -9,7 +9,9 @@ public interface IRestaurantService {
 
     void updateRestaurant(Restaurant restaurant);
 
-    List<Restaurant> getRestaurantsByCreator(Long creatorId);
+    List<Restaurant> getRestaurantsByCreator();
 
     Restaurant getRestaurantById(Long restaurantId);
+
+    List<Restaurant> getAllRestaurants();
 }
