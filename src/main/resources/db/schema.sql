@@ -149,3 +149,12 @@ CREATE TABLE IF NOT EXISTS "kam_change_log"
 ALTER TABLE public.kam_user ADD CONSTRAINT kam_user_unique_mobile UNIQUE (mobile);
 ALTER TABLE public.kam_user ADD CONSTRAINT kam_user_unique_email UNIQUE (email);
 ALTER TABLE public.kam_user ADD CONSTRAINT kam_user_unique_employee UNIQUE (employee_id);
+
+
+
+
+CREATE INDEX lead_restaurant_id_idx ON public."lead" (restaurant_id);
+CREATE INDEX lead_created_by_idx ON public."lead" (created_by);
+
+CREATE INDEX restaurant_poc_restaurant_id_idx ON public.restaurant_poc (restaurant_id);
+CREATE INDEX restaurant_poc_created_by_idx ON public.restaurant_poc (created_by);
