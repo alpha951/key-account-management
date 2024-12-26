@@ -38,7 +38,7 @@ CREATE TABLE "lead"
     CONSTRAINT "lead_created_by_foreign" FOREIGN KEY ("created_by") REFERENCES "kam_user" ("id")
 );
 
-CREATE TABLE "restauran_poc"
+CREATE TABLE "restaurant_poc"
 (
     "poc_id"        BIGINT                      NOT NULL PRIMARY KEY,
     "name"          VARCHAR(255)                NOT NULL,
@@ -48,8 +48,8 @@ CREATE TABLE "restauran_poc"
     "created_by"    BIGINT                      NOT NULL,
     "created_at"    TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at"    TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT "restauran_poc_restaurant_id_foreign" FOREIGN KEY ("restaurant_id") REFERENCES "restaurant" ("id"),
-    CONSTRAINT "restauran_poc_created_by_foreign" FOREIGN KEY ("created_by") REFERENCES "kam_user" ("id")
+    CONSTRAINT "restaurant_poc_restaurant_id_foreign" FOREIGN KEY ("restaurant_id") REFERENCES "restaurant" ("id"),
+    CONSTRAINT "restaurant_poc_created_by_foreign" FOREIGN KEY ("created_by") REFERENCES "kam_user" ("id")
 );
 
 CREATE TABLE "call_schedule"
@@ -64,7 +64,7 @@ CREATE TABLE "call_schedule"
     "created_at"          TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at"          TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "call_schedule_lead_id_foreign" FOREIGN KEY ("lead_id") REFERENCES "lead" ("lead_id"),
-    CONSTRAINT "call_schedule_poc_id_foreign" FOREIGN KEY ("poc_id") REFERENCES "restauran_poc" ("poc_id")
+    CONSTRAINT "call_schedule_poc_id_foreign" FOREIGN KEY ("poc_id") REFERENCES "restaurant_poc" ("poc_id")
 );
 
 CREATE TABLE "interaction"
@@ -82,7 +82,7 @@ CREATE TABLE "interaction"
     CONSTRAINT "interaction_caller_foreign" FOREIGN KEY ("caller") REFERENCES "kam_user" ("id"),
     CONSTRAINT "interaction_lead_id_foreign" FOREIGN KEY ("lead_id") REFERENCES "lead" ("lead_id"),
     CONSTRAINT "interaction_restaurant_id_foreign" FOREIGN KEY ("restaurant_id") REFERENCES "restaurant" ("id"),
-    CONSTRAINT "interaction_poc_id_foreign" FOREIGN KEY ("poc_id") REFERENCES "restauran_poc" ("poc_id"),
+    CONSTRAINT "interaction_poc_id_foreign" FOREIGN KEY ("poc_id") REFERENCES "restaurant_poc" ("poc_id"),
     CONSTRAINT "interaction_call_schedule_id_foreign" FOREIGN KEY ("call_schedule_id") REFERENCES "call_schedule" ("id")
 );
 
