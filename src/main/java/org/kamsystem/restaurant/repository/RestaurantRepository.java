@@ -29,7 +29,7 @@ public class RestaurantRepository implements IRestaurantRepository {
         + " pincode, city, state, address, created_by FROM restaurant WHERE id = :id";
 
     @Override
-    public void saveRestaurant(Restaurant restaurant) {
+    public void createRestaurant(Restaurant restaurant) {
         final MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("name", restaurant.getName());
         mapSqlParameterSource.addValue("pincode", restaurant.getPincode());

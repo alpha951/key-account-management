@@ -5,7 +5,7 @@ import org.kamsystem.restaurant.model.Restaurant;
 
 public interface IRestaurantRepository {
 
-    void saveRestaurant(Restaurant restaurant);
+    void createRestaurant(Restaurant restaurant);
 
     void updateRestaurant(Restaurant restaurant);
 
