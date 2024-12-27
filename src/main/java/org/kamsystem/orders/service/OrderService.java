@@ -20,6 +20,7 @@ public class OrderService implements IOrderService {
     public void createOrder(Order order) {
         Long userId = authService.getUserIdOfLoggedInUser();
         order.setCreatedBy(userId);
+        order.setOrderId(UUID.randomUUID());
         orderRepository.createOrder(order);
     }
 
