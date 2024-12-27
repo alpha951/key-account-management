@@ -5,7 +5,7 @@ import org.kamsystem.interaction.model.Interaction;
 
 public interface IInteractionRepository {
 
-    void createInteraction(Interaction interaction);
+    Long createInteraction(Interaction interaction);
 
     List<Interaction> getInteractionByLeadId(Long leadId);
 

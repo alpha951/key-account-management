@@ -8,6 +8,7 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Getter
@@ -17,7 +18,9 @@ import lombok.Setter;
 public class CallSchedule {
 
     private long id;
-    private long leadId;
+    @NonNull
+    private Long leadId;
+
     private RecurrenceType recurrenceType;
     private LocalTime preferredTime;
     private LocalDateTime startDate;

@@ -32,4 +32,9 @@ public class CallScheduleService implements ICallScheduleService {
     public List<CallSchedule> getAllCallSchedulesByDate(LocalDate date) {
         return callScheduleRepository.getCallSchedulesByDate(date);
     }
+
+    @Override
+    public void updateLastCallDate(Long callScheduleId, LocalDate lastCallDate) {
+        callScheduleRepository.updateLastCallDate(callScheduleId, lastCallDate);
+    }
 }

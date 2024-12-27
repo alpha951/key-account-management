@@ -8,6 +8,8 @@ import org.kamsystem.interaction.model.Interaction;
 import org.kamsystem.interaction.model.InteractionType;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -45,7 +47,7 @@ public class InteractionRepository implements IInteractionRepository{
 
 
     @Override
-    public void createInteraction(Interaction interaction) {
+    public Long createInteraction(Interaction interaction) {
         MapSqlParameterSource paramSource = new MapSqlParameterSource();
         paramSource.addValue("callerId", interaction.getCallerId());
         paramSource.addValue("leadId", interaction.getLeadId());
@@ -56,7 +58,9 @@ public class InteractionRepository implements IInteractionRepository{
         paramSource.addValue("interactionDetails", interaction.getInteractionDetails());
         paramSource.addValue("interactionType", interaction.getInteractionType());
         paramSource.addValue("createdAt", interaction.getCreatedAt());
-        namedParameterJdbcTemplate.update(CREATE_INTERACTION, paramSource);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update(CREATE_INTERACTION, paramSource, keyHolder);
+        return keyHolder.getKey().longValue();
     }
 
     @Override

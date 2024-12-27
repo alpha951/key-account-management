@@ -13,4 +13,6 @@ public interface ICallScheduleRepository {
     List<CallSchedule> getCallSchedulesByLeadId(long leadId);
 
     List<CallSchedule> getCallSchedulesByDate(LocalDate date);
+
+    void updateLastCallDate(long callScheduleId, LocalDate lastCallDate);
 }

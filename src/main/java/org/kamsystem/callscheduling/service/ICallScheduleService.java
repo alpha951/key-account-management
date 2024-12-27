@@ -13,4 +13,6 @@ public interface ICallScheduleService {
     List<CallSchedule> getCallScheduleByLeadId(Long leadId);
 
     List<CallSchedule> getAllCallSchedulesByDate(LocalDate date);
+
+    void updateLastCallDate(Long callScheduleId, LocalDate lastCallDate);
 }

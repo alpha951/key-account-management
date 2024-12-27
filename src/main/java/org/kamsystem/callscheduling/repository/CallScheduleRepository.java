@@ -66,6 +66,12 @@ public class CallScheduleRepository implements ICallScheduleRepository {
         WHERE lead_id = :leadId
         """;
 
+    private static final String UPDATE_LAST_CALL_DATE = """
+        UPDATE call_schedule
+        SET last_call_date = :lastCallDate
+        WHERE id = :id
+        """;
+
 
     @Override
     public void createCallSchedule(CallSchedule schedule) {
@@ -107,6 +113,14 @@ public class CallScheduleRepository implements ICallScheduleRepository {
         MapSqlParameterSource params = new MapSqlParameterSource().addValue("dayOfWeek",
             String.valueOf(date.getDayOfWeek().getValue())).addValue("dayOfMonth", date.getDayOfMonth());
         return namedParameterJdbcTemplate.query(GET_CALL_SCHEDULES_BY_DATE, params, rowMapper);
+    }
+
+    @Override
+    public void updateLastCallDate(long callScheduleId, LocalDate lastCallDate) {
+        MapSqlParameterSource params = new MapSqlParameterSource()
+            .addValue("id", callScheduleId)
+            .addValue("lastCallDate", Timestamp.valueOf(lastCallDate.atStartOfDay()));
+        namedParameterJdbcTemplate.update(UPDATE_LAST_CALL_DATE, params);
     }
 
     private final RowMapper<CallSchedule> rowMapper = (rs, rowNum) -> {
