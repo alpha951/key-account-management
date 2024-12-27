@@ -16,4 +16,6 @@ public interface ILeadRepository {
     Lead getLeadById(Long leadId);
 
     Lead getLeadByIdAndCreator(Long leadId, Long creatorId);
+
+    void updateLeadCreator(Long oldCreatorId, Long newCreatorId);
 }

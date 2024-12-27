@@ -32,6 +32,8 @@ public class LeadRepository implements ILeadRepository {
     private static final String GET_LEAD_BY_ID_AND_CREATOR = "SELECT lead_id, restaurant_id, "
         + "created_by, lead_status, created_at, updated_at FROM lead WHERE lead_id = :leadId AND created_by = :creatorId";
 
+    private static final String UPDATE_LEAD_CREATOR = "UPDATE lead SET created_by = :newCreatorId WHERE created_by = :oldCreatorId";
+
     @Override
     public void createLead(Lead lead) {
         MapSqlParameterSource params = new MapSqlParameterSource();
@@ -80,6 +82,15 @@ public class LeadRepository implements ILeadRepository {
         return namedParameterJdbcTemplate.queryForObject(GET_LEAD_BY_ID_AND_CREATOR, params,
             (rs, rowNum) -> translateResultSetToLead(rs));
     }
+
+    @Override
+    public void updateLeadCreator(Long oldCreatorId, Long newCreatorId) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("oldCreatorId", oldCreatorId);
+        params.addValue("newCreatorId", newCreatorId);
+        namedParameterJdbcTemplate.update(UPDATE_LEAD_CREATOR, params);
+    }
+
 
     private Lead translateResultSetToLead(ResultSet rs) throws SQLException {
         Lead lead = new Lead();

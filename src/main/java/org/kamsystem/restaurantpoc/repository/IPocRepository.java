@@ -16,4 +16,8 @@ public interface IPocRepository {
     Poc getPocByIdAndCreatorId(Long pocId, Long createdBy);
 
     List<Poc> getPocsByRestaurantAndCreator(Long restaurantId, Long createdBy);
+
+    List<Poc> getPocsByCreator(Long createdBy);
+
+    void updatePocCreator(Long oldCreatorId, Long newCreatorId);
 }

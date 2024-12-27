@@ -8,7 +8,7 @@ public interface IKamUserRepository {
         int role, String employeeId, String email,
         Boolean isActive);
 
-    void updateUserRole(String mobile, int role);
+    void updateUserRole(String mobile, int role, boolean isActive);
 
     KamUser getUserByMobile(String mobile);
 }

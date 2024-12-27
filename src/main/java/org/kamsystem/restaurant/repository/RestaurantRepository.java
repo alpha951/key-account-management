@@ -35,6 +35,8 @@ public class RestaurantRepository implements IRestaurantRepository {
         + " pincode, city, state, address, created_by, created_at, "
         + "updated_at FROM restaurant WHERE id = :id AND created_by = :createdBy";
 
+    private static final String UPDATE_RESTAURANT_CREATOR = "UPDATE restaurant SET created_by = :newCreatedBy WHERE created_by = :oldCreatedBy";
+
     @Override
     public void createRestaurant(Restaurant restaurant) {
         MapSqlParameterSource mapSqlParameterSource = formParamSource(restaurant);
@@ -81,6 +83,15 @@ public class RestaurantRepository implements IRestaurantRepository {
         return namedParameterJdbcTemplate.queryForObject(GET_RESTAURANT_BY_RESTAURANT_ID_AND_CREATOR_ID,
             mapSqlParameterSource,
             (rs, rowNum) -> transformResultSetToRestaurant(rs));
+    }
+
+    @Override
+    public void updateRestaurantCreator(Long oldCreatorId, Long newCreatorId) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("oldCreatedBy", oldCreatorId);
+        mapSqlParameterSource.addValue("newCreatedBy", newCreatorId);
+        namedParameterJdbcTemplate.update(UPDATE_RESTAURANT_CREATOR,
+            mapSqlParameterSource);
     }
 
 

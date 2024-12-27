@@ -18,7 +18,7 @@ public class KamUserRepository implements IKamUserRepository {
 
     private static final String CREATE_KAM_USER = "INSERT INTO kam_user (mobile, name, password, role, employee_id, email, is_active) VALUES (:mobile, :name, :password, :role, :employeeId, :email, :isActive)";
 
-    private static final String UPDATE_USER_ROLE = "UPDATE kam_user SET role = :role WHERE mobile = :mobile";
+    private static final String UPDATE_USER_ROLE = "UPDATE kam_user SET role = :role, is_active = :isActive WHERE mobile = :mobile";
 
     private static final String GET_USER_BY_MOBILE = "SELECT id, mobile, "
         + "name, password, role, employee_id, email, is_active FROM kam_user WHERE mobile = :mobile";
@@ -38,10 +38,11 @@ public class KamUserRepository implements IKamUserRepository {
     }
 
     @Override
-    public void updateUserRole(String mobile, int role) {
+    public void updateUserRole(String mobile, int role, boolean isActive) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("mobile", mobile);
         mapSqlParameterSource.addValue("role", role);
+        mapSqlParameterSource.addValue("isActive", isActive);
         namedParameterJdbcTemplate.update(UPDATE_USER_ROLE, mapSqlParameterSource);
     }
 

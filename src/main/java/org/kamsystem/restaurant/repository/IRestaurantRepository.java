@@ -16,4 +16,6 @@ public interface IRestaurantRepository {
     List<Restaurant> getAllRestaurants();
 
     Restaurant getRestaurantByIdAndCreatorId(Long restaurantId, Long userId);
+
+    void updateRestaurantCreator(Long oldCreatorId, Long newCreatorId);
 }

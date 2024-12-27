@@ -13,4 +13,6 @@ public class KamUserUpdateModel {
     private String mobile;
     @NonNull
     private UserRole role;
+    @NonNull
+    private Boolean isActive;
 }

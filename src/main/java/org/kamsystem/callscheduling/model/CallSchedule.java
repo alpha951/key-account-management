@@ -25,7 +25,7 @@ public class CallSchedule {
     private LocalTime preferredTime;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private Set<DayOfWeek> weeklyDays;
+    private Set<DayOfWeek> weeklyDays;  // For weekly recurrence like Monday, Wednesday, Friday etc.
     private Integer dayOfMonth;
     private Integer customDayInterval;
     private LocalDateTime lastCallDate;
