@@ -15,6 +15,7 @@ public class LeadService implements ILeadService {
 
     private final ILeadRepository leadRepository;
     private final IAuthService authService;
+    private final LeadAccessStrategyFactory strategyFactory;
 
     @Override
     public void createLead(Lead lead) {
@@ -40,10 +41,10 @@ public class LeadService implements ILeadService {
     @Override
     public Lead getLeadById(Long leadId) {
         UserRole role = authService.getRoleOfLoggedInUser();
-        if(role.equals(UserRole.SUPER_ADMIN)) {
-            return leadRepository.getLeadById(leadId);
-        }
         Long userId = authService.getUserIdOfLoggedInUser();
-        return leadRepository.getLeadByIdAndCreator(leadId, userId);
+
+        // Delegate to the appropriate strategy
+        LeadAccessStrategy strategy = strategyFactory.getStrategy(role);
+        return strategy.getLeadById(leadId, userId);
     }
 }
