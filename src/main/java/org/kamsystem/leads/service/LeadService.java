@@ -7,6 +7,8 @@ import org.kamsystem.common.enums.UserRole;
 import org.kamsystem.leads.model.Lead;
 import org.kamsystem.leads.model.UpdateLeadStatusRequest;
 import org.kamsystem.leads.repository.ILeadRepository;
+import org.kamsystem.leads.service.access.LeadAccessStrategy;
+import org.kamsystem.leads.service.access.LeadAccessStrategyFactory;
 import org.springframework.stereotype.Service;
 
 @Service

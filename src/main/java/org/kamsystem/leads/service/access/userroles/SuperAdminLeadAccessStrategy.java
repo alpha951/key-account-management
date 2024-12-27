@@ -1,8 +1,9 @@
-package org.kamsystem.leads.service;
+package org.kamsystem.leads.service.access.userroles;
 
 import java.util.List;
 import org.kamsystem.leads.model.Lead;
 import org.kamsystem.leads.repository.ILeadRepository;
+import org.kamsystem.leads.service.access.LeadAccessStrategy;
 import org.springframework.stereotype.Component;
 
 @Component

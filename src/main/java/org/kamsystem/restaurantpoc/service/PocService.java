@@ -7,6 +7,8 @@ import org.kamsystem.common.enums.UserRole;
 import org.kamsystem.restaurantpoc.model.Poc;
 import org.kamsystem.restaurantpoc.model.PocUpdateRequest;
 import org.kamsystem.restaurantpoc.repository.IPocRepository;
+import org.kamsystem.restaurantpoc.service.access.PocAccessStrategy;
+import org.kamsystem.restaurantpoc.service.access.PocAccessStrategyFactory;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +17,7 @@ public class PocService implements IPocService {
 
     private final IPocRepository pocRepository;
     private final IAuthService authService;
+    private final PocAccessStrategyFactory strategyFactory;
 
     @Override
     public void createPoc(Poc poc) {
@@ -23,7 +26,6 @@ public class PocService implements IPocService {
 
     @Override
     public void updatePoc(PocUpdateRequest poc) {
-        // TODO: createBy == user or super admin
         pocRepository.updatePoc(poc.getId(), poc.getName(),
             poc.getContact(), poc.getRole().name());
     }
@@ -31,20 +33,18 @@ public class PocService implements IPocService {
     @Override
     public List<Poc> getPocByRestaurant(Long restaurantId) {
         UserRole userRole = authService.getRoleOfLoggedInUser();
-        if (userRole.equals(UserRole.SUPER_ADMIN)) {
-            return pocRepository.getPocsByRestaurant(restaurantId);
-        }
         Long userId = authService.getUserIdOfLoggedInUser();
-        return pocRepository.getPocsByRestaurantAndCreator(restaurantId, userId);
+
+        PocAccessStrategy strategy = strategyFactory.getStrategy(userRole);
+        return strategy.getPocsByRestaurant(restaurantId, userId);
     }
 
     @Override
     public Poc getPocById(Long pocId) {
         UserRole userRole = authService.getRoleOfLoggedInUser();
-        if (userRole.equals(UserRole.SUPER_ADMIN)) {
-            return pocRepository.getPocById(pocId);
-        }
         Long userId = authService.getUserIdOfLoggedInUser();
-        return pocRepository.getPocByIdAndCreatorId(pocId, userId);
+
+        PocAccessStrategy strategy = strategyFactory.getStrategy(userRole);
+        return strategy.getPocById(pocId, userId);
     }
 }

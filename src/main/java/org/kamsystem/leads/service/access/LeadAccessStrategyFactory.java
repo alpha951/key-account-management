@@ -1,6 +1,8 @@
-package org.kamsystem.leads.service;
+package org.kamsystem.leads.service.access;
 
 import org.kamsystem.common.enums.UserRole;
+import org.kamsystem.leads.service.access.userroles.KamLeadAccessStrategy;
+import org.kamsystem.leads.service.access.userroles.SuperAdminLeadAccessStrategy;
 import org.springframework.stereotype.Component;
 
 @Component

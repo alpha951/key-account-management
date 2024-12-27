@@ -1,4 +1,4 @@
-package org.kamsystem.leads.service;
+package org.kamsystem.leads.service.access;
 
 import java.util.List;
 import org.kamsystem.leads.model.Lead;

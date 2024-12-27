@@ -6,6 +6,8 @@ import org.kamsystem.authentication.service.IAuthService;
 import org.kamsystem.common.enums.UserRole;
 import org.kamsystem.restaurant.model.Restaurant;
 import org.kamsystem.restaurant.repository.IRestaurantRepository;
+import org.kamsystem.restaurant.service.access.RestaurantAccessStrategy;
+import org.kamsystem.restaurant.service.access.RestaurantAccessStrategyFactory;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +16,7 @@ public class RestaurantService implements IRestaurantService {
 
     private final IAuthService authService;
     private final IRestaurantRepository restaurantRepository;
+    private final RestaurantAccessStrategyFactory strategyFactory;
 
     @Override
     public void createRestaurant(Restaurant restaurant) {
@@ -35,22 +38,25 @@ public class RestaurantService implements IRestaurantService {
 
     @Override
     public List<Restaurant> getRestaurantsByCreator() {
-        Long creatorId = authService.getUserIdOfLoggedInUser();
-        return restaurantRepository.getRestaurantByCreator(creatorId);
+        Long userId = authService.getUserIdOfLoggedInUser();
+        return restaurantRepository.getRestaurantByCreator(userId);
     }
 
     @Override
     public Restaurant getRestaurantById(Long restaurantId) {
         UserRole role = authService.getRoleOfLoggedInUser();
-        if(role.equals(UserRole.SUPER_ADMIN)) {
-            return restaurantRepository.getRestaurantById(restaurantId);
-        }
         Long userId = authService.getUserIdOfLoggedInUser();
-        return restaurantRepository.getRestaurantByIdAndCreatorId(restaurantId, userId);
+
+        RestaurantAccessStrategy strategy = strategyFactory.getStrategy(role);
+        return strategy.getRestaurantById(restaurantId, userId);
     }
 
     @Override
     public List<Restaurant> getAllRestaurants() {
-        return restaurantRepository.getAllRestaurants();
+        UserRole role = authService.getRoleOfLoggedInUser();
+        Long userId = authService.getUserIdOfLoggedInUser();
+
+        RestaurantAccessStrategy strategy = strategyFactory.getStrategy(role);
+        return strategy.getRestaurants(userId);
     }
 }
