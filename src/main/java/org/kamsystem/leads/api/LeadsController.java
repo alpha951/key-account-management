@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -24,7 +26,7 @@ public class LeadsController {
     private final ILeadService leadService;
 
     @UserAuth(allowedFor = {UserRole.SUPER_ADMIN, UserRole.KEY_ACCOUNT_MANAGER})
-    @RequestMapping("/create")
+    @PostMapping("/create")
     public ResponseEntity<?> createLead(@RequestBody @Valid Lead lead, BindingResult result) {
         if (result.hasErrors()) {
             return new ResponseEntity<>(new ApiResponse<>(false,
@@ -36,7 +38,7 @@ public class LeadsController {
     }
 
     @UserAuth(allowedFor = {UserRole.SUPER_ADMIN, UserRole.KEY_ACCOUNT_MANAGER})
-    @RequestMapping("/update-status")
+    @PostMapping("/update-status")
     public ResponseEntity<?> updateLeadStatus(@RequestBody @Valid UpdateLeadStatusRequest request,
         BindingResult result) {
         if (result.hasErrors()) {
@@ -49,21 +51,21 @@ public class LeadsController {
     }
 
     @UserAuth(allowedFor = {UserRole.KEY_ACCOUNT_MANAGER})
-    @RequestMapping("/get-by-creator")
+    @GetMapping("/get-by-creator")
     public ResponseEntity<?> getLeadsByCreator() {
         List<Lead> leads = leadService.getLeadsByCreator();
         return new ResponseEntity<>(new ApiResponse<>(true, leads), HttpStatus.OK);
     }
 
     @UserAuth(allowedFor = {UserRole.SUPER_ADMIN})
-    @RequestMapping("/get-all")
+    @GetMapping("/get-all")
     public ResponseEntity<?> getAllLeads() {
         List<Lead> leads = leadService.getAllLeads();
         return new ResponseEntity<>(new ApiResponse<>(true, leads), HttpStatus.OK);
     }
 
     @UserAuth(allowedFor = {UserRole.SUPER_ADMIN, UserRole.KEY_ACCOUNT_MANAGER})
-    @RequestMapping("/get-by-id")
+    @GetMapping("/get-by-id")
     public ResponseEntity<?> getLeadById(Long leadId) {
         Lead lead = leadService.getLeadById(leadId);
         return new ResponseEntity<>(new ApiResponse<>(true, lead), HttpStatus.OK);

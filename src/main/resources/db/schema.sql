@@ -158,3 +158,9 @@ CREATE INDEX lead_created_by_idx ON public."lead" (created_by);
 
 CREATE INDEX restaurant_poc_restaurant_id_idx ON public.restaurant_poc (restaurant_id);
 CREATE INDEX restaurant_poc_created_by_idx ON public.restaurant_poc (created_by);
+
+ALTER TABLE public."order" ADD order_status varchar NOT NULL default 'PENDING';
+
+ALTER TABLE public."order" ALTER COLUMN cart_info DROP NOT NULL;
+ALTER TABLE public."order" ALTER COLUMN shipping_info DROP NOT NULL;
+ALTER TABLE public."order" ALTER COLUMN offer_details DROP NOT NULL;
