@@ -33,43 +33,68 @@ Follow these steps to set up the project locally:
 
 2. **Install dependencies** 
 
-    ### Using Docker Compose
+### Using Docker Compose (Recommended for development and testing)
+Simply run below command this will complete the whole setup including downloading dependencies, running schema.sql and data.sql for seed data
+and spinning up the server. This will expose the database on port 6432 on your local machine.
+
+```bash
+    docker compose up --build 
+```
+
+   > If you are using old compose command then use
+```bash
+   docker-compose up --build
+```
+   
+To run containers in detach mode use `d` flag
+```bash
+  docker compose up -d
+```
+
+To stop and remove the containers and delete the volume
+```bash
+  docker compose down -v
+```
+  
+### Running the application in your machine natively
+You will need to setup the database first
+
+ **Database setup**:
+For database system you can run a docker container with below command this will expose the Postgres Container at port 6432 in your local machine. Make sure you have Docker installed else refer [official Docker docs](https://docs.docker.com/engine/install/ubuntu/)
+
+```bash
+  docker run --rm --name KAMpg-container -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root -v kamsystem:/var/lib/postgresql/data -p 6432:5432 -d postgres
+```
+To access this database in any db viewer like DBeaver use below details:
+
+```
+databse_name=postgres
+user=root
+password=root
+connection=jdbc:postgresql://localhost:6432/postgres
+```
     
+You can also create database in your machine's postgres installation and update the application.properties accordingly.    
 
-   If you have IntelliJ Idea IDE installed then simply open the project in IntelliJ and click on the play button to build the application and run the server.
+- Configure the `application.properties`  file with your database credentials:
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/databas_name
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+```
+
+#### Using IntelliJ Idea
+If you have IntelliJ Idea IDE installed then simply open the project in IntelliJ and click on the play button to build the application and run the server.
     
-    Otherwise you can use maven commands to install the dependencies for this you need to install maven in your local machine.
-      ```bash
-      mvn clean install
-      ```
+#### Using maven command
+Otherwise you can use maven commands to install the dependencies for this you need to install maven in your local machine.
 
-3. **Database setup**:
-    For database system you can run a docker container with below command this will expose the Postgres Container at port 6432 in your local machine. Make sure you have Docker installed else refer [official Docker docs](https://docs.docker.com/engine/install/ubuntu/)
-    ```bash
-      docker run --rm --name KAMpg-container -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root -v kamsystem:/var/lib/postgresql/data -p 6432:5432 -d postgres
-    ```
-   To access this database in any db viewer like DBeaver use below details:
-    ```
-    databse_name=postgres
-    user=root
-    password=root
-    connection=jdbc:postgresql://localhost:6432/postgres
-   ```
-    
-    You can also create database in your machine's postgres installation and update the application.properties accordingly.    
+  ```bash
+    mvn clean install
+  ```
 
-   - Configure the `application.properties`  file with your database credentials:
-     ```properties
-     spring.datasource.url=jdbc:postgresql://localhost:5432/databas_name
-     spring.datasource.username=your_username
-     spring.datasource.password=your_password
-     ```
 
-4. **Run the application**:
-   - Start the server using Maven:
-     ```bash
-     mvn spring-boot:run
-     ```
 
 ## Running Instructions
 
