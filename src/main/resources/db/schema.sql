@@ -56,7 +56,7 @@ CREATE TABLE public.lead
     lead_id       BIGSERIAL PRIMARY KEY,
     restaurant_id BIGINT                                                NOT NULL,
     created_by    BIGINT                                                NOT NULL,
-    lead_status   BIGINT                                                NOT NULL,
+    lead_status   VARCHAR(50)                                           NOT NULL,
     created_at    TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at    TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     FOREIGN KEY (created_by) REFERENCES public.kam_user (id),
@@ -72,7 +72,7 @@ CREATE TABLE public.audit_change_log
     old_kam_id  BIGINT,
     new_kam_id  BIGINT,
     change_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    entity_type VARCHAR
+    entity_type VARCHAR(50)
 );
 
 -- Table: call_schedule
@@ -105,7 +105,7 @@ CREATE TABLE public.interaction
     restaurant_id       BIGINT                                                NOT NULL,
     poc_id              BIGINT                                                NOT NULL,
     call_schedule_id    BIGINT,
-    call_duration       NUMERIC                                                NOT NULL,
+    call_duration       NUMERIC                                               NOT NULL,
     interaction_details TEXT                                                  NOT NULL,
     interaction_type    VARCHAR(50)                                           NOT NULL,
     created_at          TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -120,8 +120,8 @@ CREATE TABLE public.interaction
 CREATE TABLE public.kam_system_metrics
 (
     id                BIGSERIAL PRIMARY KEY,
-    metric_name       VARCHAR(50)      NOT NULL,
-    metric_value      NUMERIC      NOT NULL,
+    metric_name       VARCHAR(50) NOT NULL,
+    metric_value      NUMERIC     NOT NULL,
     metric_value_type VARCHAR(50) NOT NULL,
     timeframe         VARCHAR(50) NOT NULL,
     year              BIGINT      NOT NULL,
@@ -140,7 +140,7 @@ CREATE TABLE public.orders
     restaurant_id       BIGINT                                                 NOT NULL,
     interaction_id      BIGINT                                                 NOT NULL,
     restaurant_order_id VARCHAR(255)                                           NOT NULL,
-    amount              NUMERIC                                                 NOT NULL,
+    amount              NUMERIC                                                NOT NULL,
     currency            VARCHAR(50)                                            NOT NULL,
     cart_info           TEXT,
     shipping_info       TEXT,
@@ -149,7 +149,7 @@ CREATE TABLE public.orders
     payment_methods     VARCHAR(50)                                            NOT NULL,
     remarks             VARCHAR(255)                                           NOT NULL,
     created_at          TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP  NOT NULL,
-    order_status        VARCHAR                     DEFAULT 'PENDING'::VARCHAR NOT NULL,
+    order_status        VARCHAR(50)                 DEFAULT 'PENDING'::VARCHAR NOT NULL,
     FOREIGN KEY (created_by) REFERENCES public.kam_user (id),
     FOREIGN KEY (interaction_id) REFERENCES public.interaction (id),
     FOREIGN KEY (lead_id) REFERENCES public.lead (lead_id),
@@ -166,4 +166,4 @@ CREATE INDEX restaurant_created_by_idx ON public.restaurant USING btree (created
 CREATE INDEX orders_lead_id_idx ON public.orders USING btree (lead_id);
 CREATE INDEX orders_restaurant_id_idx ON public.orders USING btree (restaurant_id);
 CREATE INDEX orders_interaction_id_idx ON public.orders USING btree (interaction_id);
-CREATE INDEX orders_order_id_idx ON public.orders USING btree (order_id,created_by);
+CREATE INDEX orders_order_id_idx ON public.orders USING btree (order_id, created_by);
