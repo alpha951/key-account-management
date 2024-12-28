@@ -1,10 +1,10 @@
 package org.kamsystem.callscheduling.api;
 
 import jakarta.validation.Valid;
-import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.kamsystem.callscheduling.model.CallSchedule;
+import org.kamsystem.callscheduling.model.DateRequest;
 import org.kamsystem.callscheduling.service.ICallScheduleService;
 import org.kamsystem.common.model.ApiResponse;
 import org.springframework.http.HttpStatus;
@@ -51,8 +51,8 @@ public class CallScheduleController {
     }
 
     @PostMapping("/get-by-day")
-    public ResponseEntity<?> getScheduleByDay(@RequestBody LocalDate date) {
-        List<CallSchedule> schedules = callScheduleService.getAllCallSchedulesByDate(date);
+    public ResponseEntity<?> getScheduleByDay(@RequestBody DateRequest request) {
+        List<CallSchedule> schedules = callScheduleService.getAllCallSchedulesByDate(request.getDate());
         return new ResponseEntity<>(new ApiResponse<>(true, schedules),
             HttpStatus.OK);
     }

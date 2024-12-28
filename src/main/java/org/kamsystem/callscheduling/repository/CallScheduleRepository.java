@@ -31,7 +31,7 @@ public class CallScheduleRepository implements ICallScheduleRepository {
             :leadId, :recurrenceType, :preferredTime, :startDate, :endDate,
             :weeklyDays::jsonb, :dayOfMonth, :customDayInterval, :lastCallDate,
             :nextCallDate, :timeZone, :isActive
-        ) RETURNING id
+        )
         """;
 
     private static final String GET_CALL_SCHEDULE_BY_ID = """
@@ -49,7 +49,7 @@ public class CallScheduleRepository implements ICallScheduleRepository {
         FROM call_schedule
         WHERE is_active = true
         AND (
-            (recurrence_type = 'WEEKLY' AND weekly_days ? :dayOfWeek)
+            (recurrence_type = 'WEEKLY' AND weekly_days @> jsonb_build_array(:dayOfWeek))
             OR (recurrence_type = 'DAILY')
             OR (recurrence_type = 'MONTHLY' AND day_of_month = :dayOfMonth)
             OR (recurrence_type = 'CUSTOM_DAYS'
@@ -77,7 +77,7 @@ public class CallScheduleRepository implements ICallScheduleRepository {
     public void createCallSchedule(CallSchedule schedule) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("leadId", schedule.getLeadId());
-        params.addValue("recurrenceType", schedule.getRecurrenceType());
+        params.addValue("recurrenceType", schedule.getRecurrenceType().name());
         params.addValue("preferredTime", Time.valueOf(schedule.getPreferredTime()));
         params.addValue("startDate", Timestamp.valueOf(schedule.getStartDate()));
         params.addValue("endDate", schedule.getEndDate() != null ? Timestamp.valueOf(schedule.getEndDate()) : null);
@@ -111,7 +111,7 @@ public class CallScheduleRepository implements ICallScheduleRepository {
     @Override
     public List<CallSchedule> getCallSchedulesByDate(LocalDate date) {
         MapSqlParameterSource params = new MapSqlParameterSource().addValue("dayOfWeek",
-            String.valueOf(date.getDayOfWeek().getValue())).addValue("dayOfMonth", date.getDayOfMonth());
+            date.getDayOfWeek().name()).addValue("dayOfMonth", date.getDayOfMonth());
         return namedParameterJdbcTemplate.query(GET_CALL_SCHEDULES_BY_DATE, params, rowMapper);
     }
 

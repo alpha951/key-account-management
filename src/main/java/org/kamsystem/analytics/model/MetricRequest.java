@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class MetricRequest {
-    private Matric metric;
+    private Metric metric;
     private Timeframe timeframe;
 }

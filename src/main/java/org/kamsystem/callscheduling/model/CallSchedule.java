@@ -31,7 +31,7 @@ public class CallSchedule {
     private LocalDateTime lastCallDate;
     private LocalDateTime nextCallDate;
     private String timeZone;
-    private boolean isActive;
+    private boolean active;
     private Date createdDate;
     private Date updatedDate;
 

@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum Matric {
+public enum Metric {
     /*
         total revenue / total number of orders
      */

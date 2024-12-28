@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.kamsystem.analytics.dao.KamMetric;
-import org.kamsystem.analytics.model.Matric;
+import org.kamsystem.analytics.model.Metric;
 import org.kamsystem.analytics.model.Timeframe;
 import org.kamsystem.analytics.repository.calculations.IAnalyticsRepository;
 import org.kamsystem.analytics.repository.metrics.IMetricRepository;
@@ -25,7 +25,7 @@ public class MetricService implements IMetricService {
         LocalDate now = LocalDate.now();
         LocalDate startDate = now.minusDays(timeframe.getDays());
 
-        for (Matric metric : Matric.values()) {
+        for (Metric metric : Metric.values()) {
             BigDecimal value = calculateMetric(metric, startDate, now);
             metricRepository.createMetric(new KamMetric(
                 null,
@@ -42,11 +42,11 @@ public class MetricService implements IMetricService {
     }
 
     @Override
-    public List<KamMetric> getMetrics(Matric matric, Timeframe timeframe) {
-       return metricRepository.getMetricsByAttributes(matric.name(), timeframe.name());
+    public List<KamMetric> getMetrics(Metric metric, Timeframe timeframe) {
+       return metricRepository.getMetricsByAttributes(metric.name(), timeframe.name());
     }
 
-    private BigDecimal calculateMetric(Matric metric, LocalDate startDate, LocalDate endDate) {
+    private BigDecimal calculateMetric(Metric metric, LocalDate startDate, LocalDate endDate) {
         return switch (metric) {
             case AVERAGE_ORDER_VALUE -> analyticsRepository.getAverageOrderValue(startDate, endDate);
             case LEAD_CONVERTION_RATE -> analyticsRepository.getLeadConversionRate(startDate, endDate);
