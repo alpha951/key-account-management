@@ -8,9 +8,11 @@ import org.kamsystem.authentication.model.UserLoginResponse;
 import org.kamsystem.authentication.service.AuthService;
 import org.kamsystem.common.model.ApiResponse;
 import org.kamsystem.kamuser.service.IKamUserService;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,5 +36,11 @@ public class AuthController {
         UserLoginResponse userLoginResponse = authService.login(userLoginRequest.getMobile(),
             userLoginRequest.getPassword());
         return new ResponseEntity<>(new ApiResponse<>(true, userLoginResponse), HttpStatus.OK);
+    }
+
+    @ExceptionHandler(DataAccessException.class)
+    public ResponseEntity<?> handleDataAccessException(DataAccessException e) {
+        log.error("Data access exception: {}", e.getMessage(), e);
+        return new ResponseEntity<>(new ApiResponse<>(false, "User not found"), HttpStatus.BAD_REQUEST);
     }
 }

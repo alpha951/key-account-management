@@ -23,7 +23,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<?> processControllerException(HttpServletRequest request, Exception ex) {
-        log.error("Global Exception Handler - Exception, url: {}", request.getRequestURL(), ex);
+        log.error("Global Exception Handler - Exception, url: {}, message: {}", request.getRequestURL(),
+            DtoConstants.GENERIC_ERROR_MSG, ex);
         ApiResponse<String> body = new ApiResponse<>(false, DtoConstants.GENERIC_ERROR_MSG);
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -34,7 +35,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {NoHandlerFoundException.class})
     public ResponseEntity<?> processControllerInvalidUrlException(HttpServletRequest request,
         NoHandlerFoundException ex) {
-        log.info("Global Exception Handler - NoHandlerFoundException, url: {}, IP Address: {}, User Agent: {}",
+        log.info("Global Exception Handler - NoHandlerFoundException, Invalid request URL : {}, IP Address: {}, User Agent: {}",
             request.getRequestURL(), request.getHeader("X-Forwarded-For"), request.getHeader("User-Agent"), ex);
         ApiResponse<String> body = new ApiResponse<>(false, "Invalid request URL");
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
@@ -47,7 +48,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class})
     public ResponseEntity<?> processControllerInvalidMethodArgsException(HttpServletRequest request,
         MethodArgumentTypeMismatchException ex) {
-        log.debug("Global Exception Handler - MethodArgumentTypeMismatchException, url: {}", request.getRequestURL(),
+        log.debug("Global Exception Handler - MethodArgumentTypeMismatchException, url: {}, Invalid request", request.getRequestURL(),
             ex);
         ApiResponse<String> body = new ApiResponse<>(false, "Invalid request");
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
@@ -59,7 +60,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {HttpMessageNotReadableException.class})
     public ResponseEntity<?> processControllerInvalidRequestException(HttpServletRequest request,
         HttpMessageNotReadableException ex) {
-        log.debug("Global Exception Handler - HttpMessageNotReadableException, url: {}", request.getRequestURL(), ex);
+        log.debug("Global Exception Handler - HttpMessageNotReadableException, url: {}, Invalid request body", request.getRequestURL(), ex);
         ApiResponse<String> body = new ApiResponse<>(false, "Invalid request body");
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
@@ -70,7 +71,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {HttpRequestMethodNotSupportedException.class})
     public ResponseEntity<?> processControllerHttpMethodException(HttpServletRequest request,
         HttpRequestMethodNotSupportedException ex) {
-        log.error("Global Exception Handler - UnsupportedHttpMethodException, url: {}", request.getRequestURL());
+        log.error("Global Exception Handler - UnsupportedHttpMethodException, url: {}, Http method not allowed", request.getRequestURL());
         ApiResponse<String> body = new ApiResponse<>(false, "Http method not allowed");
         return new ResponseEntity<>(body, HttpStatus.METHOD_NOT_ALLOWED);
     }
@@ -80,7 +81,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = {DataAccessException.class})
     public ResponseEntity<?> processControllerDataAccessException(HttpServletRequest request, DataAccessException ex) {
-        log.error("Global Exception Handler - DataAccessException, url: {}", request.getRequestURL(), ex);
+        log.error(" Exception Handler - DataAccessException, url: {}, message: {}", request.getRequestURL(),
+            DtoConstants.RESOURCE_NOT_FOUND, ex);
         ApiResponse<String> body = new ApiResponse<>(false, DtoConstants.RESOURCE_NOT_FOUND);
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }

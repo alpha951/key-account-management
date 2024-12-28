@@ -6,6 +6,7 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import org.kamsystem.orders.enums.Currency;
 import org.kamsystem.orders.enums.Offers;
@@ -20,9 +21,13 @@ public class Order {
 
     private Long id;
     private UUID orderId;
+    @NonNull
     private Long restaurantId;
+    @NonNull
     private Long leadId;
+    @NonNull
     private Long interactionId;
+    @NonNull
     private BigDecimal orderAmount;
     private Currency currency;
     private String cartInfo;

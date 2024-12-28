@@ -4,6 +4,8 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import org.kamsystem.authentication.service.IAuthService;
 import org.kamsystem.common.enums.UserRole;
+import org.kamsystem.restaurant.exception.RestaurantErrorCode;
+import org.kamsystem.restaurant.exception.RestaurantException;
 import org.kamsystem.restaurant.model.Restaurant;
 import org.kamsystem.restaurant.repository.IRestaurantRepository;
 import org.kamsystem.restaurant.service.access.RestaurantAccessStrategy;
@@ -31,7 +33,8 @@ public class RestaurantService implements IRestaurantService {
         UserRole role = authService.getRoleOfLoggedInUser();
 
         if (!role.equals(UserRole.SUPER_ADMIN) && !userId.equals(restaurant.getCreatedBy())) {
-            throw new RuntimeException("You are not allowed to update this restaurant");
+            throw new RestaurantException(RestaurantErrorCode.RESTAURANT_NOT_FOUND,
+                "You are not allowed to update this restaurant");
         }
         restaurantRepository.updateRestaurant(restaurant);
     }

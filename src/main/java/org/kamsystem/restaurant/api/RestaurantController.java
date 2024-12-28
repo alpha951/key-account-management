@@ -71,7 +71,7 @@ public class RestaurantController {
 
     @ExceptionHandler(RestaurantException.class)
     public ResponseEntity<?> handleResolutionException(RestaurantException e) {
-        log.debug("Restaurant exception: {}", e.getMessage(), e);
+        log.error("Restaurant exception: {}", e.getMessage(), e);
         return new ResponseEntity<>(new ApiResponse<>(false, e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }
