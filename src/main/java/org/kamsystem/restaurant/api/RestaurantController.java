@@ -46,7 +46,7 @@ public class RestaurantController {
         return new ResponseEntity<>(new ApiResponse<>(true, "Restaurant updated successfully"), HttpStatus.OK);
     }
 
-    @UserAuth(allowedFor = {UserRole.KEY_ACCOUNT_MANAGER})
+    @UserAuth(allowedFor = {UserRole.SUPER_ADMIN, UserRole.KEY_ACCOUNT_MANAGER})
     @GetMapping("/get")
     public ResponseEntity<?> getRestaurantsByCreator() {
         return new ResponseEntity<>(new ApiResponse<>(true, restaurantService.getRestaurantsByCreator()),
@@ -56,7 +56,7 @@ public class RestaurantController {
 
     @UserAuth(allowedFor = {UserRole.SUPER_ADMIN,
         UserRole.KEY_ACCOUNT_MANAGER})
-    @GetMapping("/id")
+    @GetMapping("/get-by-id")
     public ResponseEntity<?> getRestaurantById(@RequestParam Long restaurantId) {
         return new ResponseEntity<>(new ApiResponse<>(true, restaurantService.getRestaurantById(restaurantId)),
             HttpStatus.OK

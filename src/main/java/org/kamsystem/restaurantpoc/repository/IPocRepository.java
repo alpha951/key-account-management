@@ -7,7 +7,7 @@ public interface IPocRepository {
 
     void createPoc(Poc poc);
 
-    void updatePoc(Long id, String name, String contact, String role);
+    void updatePoc(Long id, String name, String contact, int role);
 
     List<Poc> getPocsByRestaurant(Long restaurantId);
 

@@ -14,7 +14,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +25,7 @@ public class OrderController {
 
     private final IOrderService orderService;
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<?> createOrder(@RequestBody @Valid Order order,
         BindingResult result) {
         if (result.hasErrors()) {
@@ -38,7 +37,7 @@ public class OrderController {
             HttpStatus.CREATED);
     }
 
-    @PutMapping("/{orderId}/status")
+    @PostMapping("/update-status")
     public ResponseEntity<?> updateOrderStatus(@RequestBody @Valid OrderStatusUpdateRequest request,
         BindingResult result) {
         if (result.hasErrors()) {
@@ -56,7 +55,7 @@ public class OrderController {
         return new ResponseEntity<>(new ApiResponse<>(true, order), HttpStatus.OK);
     }
 
-    @GetMapping("/restaurant/{restaurantId}")
+    @GetMapping("/get-by-restaurant/{restaurantId}")
     public ResponseEntity<?> getOrderByRestaurantId(@PathVariable Long restaurantId) {
         List<Order> orders = orderService.getOrderByRestaurantId(restaurantId);
         return new ResponseEntity<>(new ApiResponse<>(true, orders), HttpStatus.OK);

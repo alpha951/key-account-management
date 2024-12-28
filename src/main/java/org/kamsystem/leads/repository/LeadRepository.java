@@ -19,7 +19,7 @@ public class LeadRepository implements ILeadRepository {
     private static final String CREATE_LEAD = "INSERT INTO lead (restaurant_id, created_by, lead_status)"
         + " VALUES (:restaurantId, :createdBy, :leadStatus)";
 
-    private static final String UPDATE_LEAD_STATUS = "UPDATE lead SET lead_status = :leadStatus, updated_at = now() WHERE id = :leadId";
+    private static final String UPDATE_LEAD_STATUS = "UPDATE lead SET lead_status = :leadStatus, updated_at = now() WHERE lead_id = :leadId";
 
     private static final String GET_LEADS_BY_CREATOR = "SELECT lead_id,"
         + "restaurant_id, created_by, lead_status, created_at, updated_at FROM lead WHERE created_by = :creatorId";

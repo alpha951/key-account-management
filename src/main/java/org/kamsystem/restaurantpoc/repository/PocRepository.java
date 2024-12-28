@@ -62,7 +62,7 @@ public class PocRepository implements IPocRepository {
         namedParameterJdbcTemplate.update(CREATE_POC, paramSource);
     }
 
-    public void updatePoc(Long id, String name, String contact, String role) {
+    public void updatePoc(Long id, String name, String contact, int role) {
         MapSqlParameterSource paramSource = new MapSqlParameterSource();
         paramSource.addValue("id", id);
         paramSource.addValue("name", name);

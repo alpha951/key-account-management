@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @AllArgsConstructor
-public class OrderRepository implements IOrderRepository{
+public class OrderRepository implements IOrderRepository {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -36,14 +36,14 @@ public class OrderRepository implements IOrderRepository{
         + " restaurant_id, interaction_id,"
         + " restaurant_order_id, amount, currency, cart_info, "
         + "shipping_info, offer_details, created_by, "
-        + "payment_methods, remarks, order_status FROM orders WHERE order_id = :orderId";
+        + "payment_methods, remarks, order_status, created_at FROM orders WHERE order_id = :orderId";
 
     private static final String GET_ORDER_BY_RESTAURANT_ID = "SELECT"
         + " order_id, lead_id,"
         + " restaurant_id, interaction_id,"
         + " restaurant_order_id, amount, currency, cart_info, "
         + "shipping_info, offer_details, created_by, "
-        + "payment_methods, remarks, order_status FROM orders WHERE restaurant_id = :restaurantId";
+        + "payment_methods, remarks, order_status, created_at FROM orders WHERE restaurant_id = :restaurantId";
 
 
     @Override
@@ -53,21 +53,21 @@ public class OrderRepository implements IOrderRepository{
         parameterSource.addValue("leadId", order.getLeadId());
         parameterSource.addValue("restaurantId", order.getRestaurantId());
         parameterSource.addValue("interactionId", order.getInteractionId());
-        parameterSource.addValue("restaurantOrderId", order.getId());
+        parameterSource.addValue("restaurantOrderId", order.getRestaurantOrderId());
         parameterSource.addValue("amount", order.getOrderAmount());
-        parameterSource.addValue("currency", order.getCurrency());
+        parameterSource.addValue("currency", order.getCurrency().name());
         parameterSource.addValue("cartInfo", order.getCartInfo());
         parameterSource.addValue("shippingInfo", order.getShippingInfo());
-        parameterSource.addValue("offerDetails", order.getOffer());
+        parameterSource.addValue("offerDetails", order.getOffer().name());
         parameterSource.addValue("createdBy", order.getCreatedBy());
-        parameterSource.addValue("paymentMethods", order.getPaymentMethod());
+        parameterSource.addValue("paymentMethods", order.getPaymentMethod().name());
         parameterSource.addValue("remarks", order.getRemarks());
-        parameterSource.addValue("orderStatus", order.getOrderStatus());
+        parameterSource.addValue("orderStatus", order.getOrderStatus().name());
         namedParameterJdbcTemplate.update(CREATE_ORDER, parameterSource);
     }
 
     @Override
-    public void updateOrderStatus(String orderId, String orderStatus) {
+    public void updateOrderStatus(UUID orderId, String orderStatus) {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("orderId", orderId);
         parameterSource.addValue("orderStatus", orderStatus);
@@ -75,7 +75,7 @@ public class OrderRepository implements IOrderRepository{
     }
 
     @Override
-    public Order getOrderById(String orderId) {
+    public Order getOrderById(UUID orderId) {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("orderId", orderId);
         return namedParameterJdbcTemplate.queryForObject(GET_ORDER_BY_ID, parameterSource,
@@ -96,16 +96,18 @@ public class OrderRepository implements IOrderRepository{
         order.setLeadId(rs.getLong("lead_id"));
         order.setRestaurantId(rs.getLong("restaurant_id"));
         order.setInteractionId(rs.getLong("interaction_id"));
-        order.setId(rs.getLong("restaurant_order_id"));
+        order.setRestaurantOrderId(rs.getString("restaurant_order_id"));
         order.setOrderAmount(rs.getBigDecimal("amount"));
         order.setCurrency(Currency.valueOf(rs.getString("currency")));
         order.setCartInfo(rs.getString("cart_info"));
         order.setShippingInfo(rs.getString("shipping_info"));
-        order.setOffer(Offers.valueOf(rs.getString("offer_details")));
+        order.setOffer(rs.getString("offer_details") != null ?
+            Offers.valueOf(rs.getString("offer_details")) : null);
         order.setCreatedBy(rs.getLong("created_by"));
         order.setPaymentMethod(PaymentMethod.valueOf(rs.getString("payment_methods")));
         order.setRemarks(rs.getString("remarks"));
         order.setOrderStatus(OrderStatus.valueOf(rs.getString("order_status")));
+        order.setCreatedAt(rs.getTimestamp("created_at"));
         return order;
     }
 }

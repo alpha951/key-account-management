@@ -8,6 +8,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,8 +24,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<?> processControllerException(HttpServletRequest request, Exception ex) {
-        log.error("Global Exception Handler - Exception, url: {}, message: {}", request.getRequestURL(),
-            DtoConstants.GENERIC_ERROR_MSG, ex);
+        log.error("Global Exception Handler - Exception, url: {}, message: {}, trace : {}", request.getRequestURL(),
+            DtoConstants.GENERIC_ERROR_MSG, ex.getStackTrace(), ex);
         ApiResponse<String> body = new ApiResponse<>(false, DtoConstants.GENERIC_ERROR_MSG);
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -84,9 +85,20 @@ public class GlobalExceptionHandler {
         log.error(" Exception Handler - DataAccessException, url: {}, message: {}", request.getRequestURL(),
             DtoConstants.RESOURCE_NOT_FOUND, ex);
         ApiResponse<String> body = new ApiResponse<>(false, DtoConstants.RESOURCE_NOT_FOUND);
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {BadSqlGrammarException.class})
+    public ResponseEntity<?> processControllerBadSqlGrammarException(HttpServletRequest request, BadSqlGrammarException ex) {
+        log.error(" Exception Handler - BadSqlGrammarException, url: {}, message: {}", request.getRequestURL(),
+            DtoConstants.RESOURCE_NOT_FOUND, ex);
+        ApiResponse<String> body = new ApiResponse<>(false, DtoConstants.GENERIC_ERROR_MSG);
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * Custom exception for invalid mobile number
+     */
     @ExceptionHandler(value = {InvalidMobileException.class})
     public ResponseEntity<?> processInvalidMobileException(HttpServletRequest request, InvalidMobileException ex) {
         log.error("Global Exception Handler - InvalidMobileException, url: {}, message: {}", request.getRequestURL(),

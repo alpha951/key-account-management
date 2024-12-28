@@ -26,12 +26,12 @@ public class OrderService implements IOrderService {
 
     @Override
     public void updateOrderStatus(UUID orderId, OrderStatus orderStatus) {
-        orderRepository.updateOrderStatus(orderId.toString(), orderStatus.name());
+        orderRepository.updateOrderStatus(orderId, orderStatus.name());
     }
 
     @Override
     public Order getOrderById(UUID orderId) {
-        return orderRepository.getOrderById(orderId.toString());
+        return orderRepository.getOrderById(orderId);
     }
 
     @Override

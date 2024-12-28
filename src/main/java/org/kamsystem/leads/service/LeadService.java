@@ -21,6 +21,8 @@ public class LeadService implements ILeadService {
 
     @Override
     public void createLead(Lead lead) {
+        Long userId = authService.getUserIdOfLoggedInUser();
+        lead.setCreatorId(userId);
         leadRepository.createLead(lead);
     }
 

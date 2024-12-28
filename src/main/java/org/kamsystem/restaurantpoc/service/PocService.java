@@ -21,13 +21,15 @@ public class PocService implements IPocService {
 
     @Override
     public void createPoc(Poc poc) {
+        Long userId = authService.getUserIdOfLoggedInUser();
+        poc.setCreatedBy(userId);
         pocRepository.createPoc(poc);
     }
 
     @Override
     public void updatePoc(PocUpdateRequest poc) {
         pocRepository.updatePoc(poc.getId(), poc.getName(),
-            poc.getContact(), poc.getRole().name());
+            poc.getContact(), poc.getRole().getId());
     }
 
     @Override

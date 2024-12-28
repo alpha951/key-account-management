@@ -78,8 +78,8 @@ SELECT setval('kam_system_metrics_id_seq', (SELECT MAX(id) FROM kam_system_metri
 -- Mock Data for orders
 INSERT INTO public.orders (id, order_id, lead_id, restaurant_id, interaction_id, restaurant_order_id, amount, currency, created_by, payment_methods, remarks, order_status)
 VALUES
-(1, gen_random_uuid(), 1, 1, 1, 'ORDER001', 5000, 'INR', 1, 'COD', 'Order delivered', 'DELIVERED'),
-(2, gen_random_uuid(), 2, 2, 2, 'ORDER002', 7500, 'INR', 2, 'Online', 'Order pending', 'PENDING'),
-(3, gen_random_uuid(), 3, 3, 3, 'ORDER003', 10000, 'INR', 3, 'COD', 'Order confirmed', 'CONFIRMED');
+(1, gen_random_uuid(), 1, 1, 1, 'ORDER001', 5000, 'INR', 1, 'UPI', 'Order delivered', 'DELIVERED'),
+(2, gen_random_uuid(), 2, 2, 2, 'ORDER002', 7500, 'INR', 2, 'CHEQUE', 'Order pending', 'PENDING'),
+(3, gen_random_uuid(), 3, 3, 3, 'ORDER003', 10000, 'INR', 3, 'CREDIT_CARD', 'Order confirmed', 'CONFIRMED');
 -- Update sequence
 SELECT setval('orders_id_seq', (SELECT MAX(id) FROM orders));

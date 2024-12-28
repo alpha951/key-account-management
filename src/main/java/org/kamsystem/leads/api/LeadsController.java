@@ -50,7 +50,7 @@ public class LeadsController {
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
-    @UserAuth(allowedFor = {UserRole.KEY_ACCOUNT_MANAGER})
+    @UserAuth(allowedFor = {UserRole.SUPER_ADMIN, UserRole.KEY_ACCOUNT_MANAGER})
     @GetMapping("/get-by-creator")
     public ResponseEntity<?> getLeadsByCreator() {
         List<Lead> leads = leadService.getLeadsByCreator();

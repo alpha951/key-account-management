@@ -19,16 +19,23 @@ import org.kamsystem.orders.enums.PaymentMethod;
 @NoArgsConstructor
 public class Order {
 
-    private Long id;
     private UUID orderId;
+
     @NonNull
     private Long restaurantId;
+
     @NonNull
     private Long leadId;
+
+    @NonNull
+    private String restaurantOrderId;
+
     @NonNull
     private Long interactionId;
+
     @NonNull
     private BigDecimal orderAmount;
+
     private Currency currency;
     private String cartInfo;
     private String shippingInfo;

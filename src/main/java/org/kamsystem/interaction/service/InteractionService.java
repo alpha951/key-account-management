@@ -22,7 +22,7 @@ public class InteractionService implements IInteractionService {
         Long userId = authService.getUserIdOfLoggedInUser();
         interaction.setCallerId(userId);
         Long id = interactionRepository.createInteraction(interaction);
-        if (id != null) {
+        if (id != null && interaction.getCallScheduleId() != null) {
             callScheduleService.updateLastCallDate(interaction.getCallScheduleId(), LocalDate.now());
         }
     }

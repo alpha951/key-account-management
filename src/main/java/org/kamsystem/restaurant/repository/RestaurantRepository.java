@@ -55,7 +55,7 @@ public class RestaurantRepository implements IRestaurantRepository {
     public List<Restaurant> getRestaurantByCreator(Long createdBy) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("id", createdBy);
-
+        mapSqlParameterSource.addValue("createdBy", createdBy);
         return namedParameterJdbcTemplate.query(SELECT_RESTAURANT_BY_CREATOR, mapSqlParameterSource,
             (rs, rowNum) -> transformResultSetToRestaurant(rs));
     }

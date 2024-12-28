@@ -3,6 +3,7 @@ package org.kamsystem.interaction.repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import org.kamsystem.interaction.model.Interaction;
 import org.kamsystem.interaction.model.InteractionType;
@@ -18,8 +19,8 @@ public class InteractionRepository implements IInteractionRepository{
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private static final String CREATE_INTERACTION = "INSERT INTO interaction (caller_id, lead_id, "
-        + "restaurant_id, poc_id, call_schedule_id, call_duration, interaction_details, interaction_type, "
-        + "created_at) VALUES (:callerId, :leadId, :restaurantId, :pocId, :callScheduleId, :callDuration, :interactionDetails, :interactionType, :createdAt)";
+        + "restaurant_id, poc_id, call_schedule_id, call_duration, interaction_details, interaction_type) "
+        + "VALUES (:callerId, :leadId, :restaurantId, :pocId, :callScheduleId, :callDuration, :interactionDetails, :interactionType)";
 
     private static final String GET_INTERACTION_BY_LEAD_ID = "SELECT id, caller_id, "
         + "lead_id, restaurant_id, poc_id, call_schedule_id, call_duration,"
@@ -56,11 +57,11 @@ public class InteractionRepository implements IInteractionRepository{
         paramSource.addValue("callScheduleId", interaction.getCallScheduleId());
         paramSource.addValue("callDuration", interaction.getCallDuration());
         paramSource.addValue("interactionDetails", interaction.getInteractionDetails());
-        paramSource.addValue("interactionType", interaction.getInteractionType());
-        paramSource.addValue("createdAt", interaction.getCreatedAt());
+        paramSource.addValue("interactionType", interaction.getInteractionType().name());
+
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update(CREATE_INTERACTION, paramSource, keyHolder);
-        return keyHolder.getKey().longValue();
+        namedParameterJdbcTemplate.update(CREATE_INTERACTION, paramSource, keyHolder, new String[]{"id"});
+        return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
     @Override

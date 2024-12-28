@@ -46,7 +46,7 @@ public class AuthService implements IAuthService {
             throw new AuthException("User not logged in");
         }
 
-        return (Long) authentication.getPrincipal();
+        return Long.valueOf((String) authentication.getPrincipal());
     }
 
     @Override
