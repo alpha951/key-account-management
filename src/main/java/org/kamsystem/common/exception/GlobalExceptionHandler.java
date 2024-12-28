@@ -86,4 +86,12 @@ public class GlobalExceptionHandler {
         ApiResponse<String> body = new ApiResponse<>(false, DtoConstants.RESOURCE_NOT_FOUND);
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(value = {InvalidMobileException.class})
+    public ResponseEntity<?> processInvalidMobileException(HttpServletRequest request, InvalidMobileException ex) {
+        log.error("Global Exception Handler - InvalidMobileException, url: {}, message: {}", request.getRequestURL(),
+            ex.getMessage(), ex);
+        ApiResponse<String> body = new ApiResponse<>(false, ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
 }
