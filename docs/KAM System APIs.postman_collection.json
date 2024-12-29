@@ -1,0 +1,1197 @@
+{
+	"info": {
+		"_postman_id": "00317fdc-204b-470d-a6a0-57dcd5e8d8cf",
+		"name": "KAM System APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40691637",
+		"_collection_link": "https://www.postman.com/spaceflight-candidate-61154118/workspace/kam-apis-demo/collection/40691637-00317fdc-204b-470d-a6a0-57dcd5e8d8cf?action=share&source=collection_link&creator=40691637"
+	},
+	"item": [
+		{
+			"name": "kam-user",
+			"item": [
+				{
+					"name": "admin-only",
+					"item": [
+						{
+							"name": "create-user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"mobile\": \"8094123297\",\n  \"name\": \"Elon Tesla\",\n  \"password\": \"password\",\n  \"role\": \"KEY_ACCOUNT_MANAGER\", \n  \"employeeId\": \"65655\",\n  \"email\": \"nikol@mail.com\",\n  \"isActive\": true\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/kam-user/create-user",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"kam-user",
+										"create-user"
+									]
+								},
+								"description": "Generated from cURL: curl --location 'https://apikam.keshavcarpenter.tech/api/auth/login' \\\n--header 'Authorization: Bearer ' \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"mobile\" : \"9999999991\",\n    \"password\": \"password\"\n}'\n\n"
+							},
+							"response": []
+						},
+						{
+							"name": "update-user-role",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"mobile\": \"8094123296\",\n  \"role\": \"SUPER_ADMIN\", \n  \"isActive\": true\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/kam-user/update-role",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"kam-user",
+										"update-role"
+									]
+								},
+								"description": "Generated from cURL: curl --location 'https://apikam.keshavcarpenter.tech/api/auth/login' \\\n--header 'Authorization: Bearer ' \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"mobile\" : \"9999999991\",\n    \"password\": \"password\"\n}'\n\n"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "user-login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Extract the token from the response body",
+									"var jsonResponse = pm.response.json();",
+									"var token = jsonResponse.data.token;",
+									"",
+									"// Set the token as a env variable",
+									"pm.environment.set(\"authToken\", token);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"mobile\" : \"9999999991\",\n    \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Generated from cURL: curl --location 'https://apikam.keshavcarpenter.tech/api/auth/login' \\\n--header 'Authorization: Bearer ' \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"mobile\" : \"9999999991\",\n    \"password\": \"password\"\n}'\n\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "restaurant",
+			"item": [
+				{
+					"name": "admin-only",
+					"item": [
+						{
+							"name": "all",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/restaurants/all",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"restaurants",
+										"all"
+									]
+								},
+								"description": "Generated from cURL: curl -X GET {{baseUrl}}/all \\\n  -H \"Authorization: Bearer {{authToken}}\"\n"
+							},
+							"response": [
+								{
+									"name": "all",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer "
+											}
+										],
+										"url": {
+											"raw": "https://apikam.keshavcarpenter.tech/api/restaurants/all",
+											"protocol": "https",
+											"host": [
+												"apikam",
+												"keshavcarpenter",
+												"tech"
+											],
+											"path": [
+												"api",
+												"restaurants",
+												"all"
+											]
+										}
+									},
+									"_postman_previewlanguage": "Text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Very Tasty Cousine\",\n  \"pincode\": \"324005\",\n  \"city\": \"Kota\",\n  \"state\": \"Rajasthan\",\n  \"address\": \"Mahaveer Nagar 2nd\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/restaurants/create",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"restaurants",
+								"create"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST \"http://localhost:8080/restaurant/create\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n  \"name\": \"Restaurant Name\",\n  \"pincode\": \"123456\",\n  \"city\": \"City Name\",\n  \"state\": \"State Name\",\n  \"address\": \"Restaurant Address\",\n  \"createdBy\": 1,\n  \"createdAt\": \"2024-12-28T12:00:00Z\",\n  \"updatedAt\": \"2024-12-28T12:00:00Z\"\n}'\n"
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"id\": 6,\n        \"name\": \"Super Tasty Cousine\",\n        \"pincode\": \"324006\",\n        \"city\": \"Kota\",\n        \"state\": \"Rajasthan\",\n        \"address\": \"16561 New RGN St, Kota\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/restaurants/update",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"restaurants",
+								"update"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST {{baseUrl}}/update \\\n  -H \"Authorization: Bearer {{authToken}}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n        \"id\": 1,\n        \"name\": \"Updated Restaurant Name\",\n        \"pincode\": \"654321\",\n        \"city\": \"Updated City\",\n        \"state\": \"Updated State\",\n        \"address\": \"456 New Restaurant St, Updated City\"\n      }'\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get-by-creator",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/restaurants/get",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"restaurants",
+								"get"
+							]
+						},
+						"description": "Generated from cURL: curl -X GET {{baseUrl}}/get \\\n  -H \"Authorization: Bearer {{authToken}}\"\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get-by-id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/restaurants/get-by-id?restaurantId=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"restaurants",
+								"get-by-id"
+							],
+							"query": [
+								{
+									"key": "restaurantId",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl -X GET \"{{baseUrl}}/id?restaurantId=1\" \\\n  -H \"Authorization: Bearer {{authToken}}\"\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "poc",
+			"item": [
+				{
+					"name": "poc-create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"name\": \"John Doe\",\n        \"restaurantId\": 1,\n        \"pocRole\": \"OWNER\",\n        \"contact\": \"keshavcom\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/poc/create",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"poc",
+								"create"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST {{baseUrl}}/create \\\n  -H \"Authorization: Bearer {{authToken}}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n        \"name\": \"John Doe\",\n        \"restaurantId\": 101,\n        \"pocRole\": \"OWNER\",\n        \"contact\": \"john.doe@example.com\"\n      }'\n"
+					},
+					"response": []
+				},
+				{
+					"name": "poc-update",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 9,\n    \"name\": \"Jane Doe\",\n    \"contact\": \"someemail@example.com\",\n    \"role\": \"GENERAL_MANAGER\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/poc/update",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"poc",
+								"update"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST {{baseUrl}}/update \\\n  -H \"Authorization: Bearer {{authToken}}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n        \"id\": 1,\n        \"name\": \"Jane Doe\",\n        \"contact\": \"jane.doe@example.com\",\n        \"role\": \"GENERAL_MANAGER\"\n      }'\n"
+					},
+					"response": []
+				},
+				{
+					"name": "poc-by-restaurant-id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/poc/get/restaurant?restaurantId=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"poc",
+								"get",
+								"restaurant"
+							],
+							"query": [
+								{
+									"key": "restaurantId",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl -X GET \"{{baseUrl}}/get/restaurant?restaurantId=101\" \\\n  -H \"Authorization: Bearer {{authToken}}\"\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get-poc-by-id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/poc/get?pocId=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"poc",
+								"get"
+							],
+							"query": [
+								{
+									"key": "pocId",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl -X GET \"{{baseUrl}}/get?pocId=1\" \\\n  -H \"Authorization: Bearer {{authToken}}\"\n"
+					},
+					"response": []
+				}
+			],
+			"description": "APIs to perform action related to Restaurant POCs"
+		},
+		{
+			"name": "leads",
+			"item": [
+				{
+					"name": "lead-create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"restaurantId\": 1,\n    \"status\": \"NEW\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/leads/create",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"leads",
+								"create"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST {{baseUrl}}/create \\\n  -H \"Authorization: Bearer {{authToken}}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n        \"restaurantId\": 101,\n        \"creatorId\": 1,\n        \"status\": \"NEW\"\n      }'\n"
+					},
+					"response": []
+				},
+				{
+					"name": "lead-update-status",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"leadId\": 4,\n    \"status\": \"CONVERTED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/leads/update-status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"leads",
+								"update-status"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST {{baseUrl}}/update-status \\\n  -H \"Authorization: Bearer {{authToken}}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n        \"leadId\": 1,\n        \"status\": \"CONTACTED\"\n      }'\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get-by-creator",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/leads/get-by-creator",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"leads",
+								"get-by-creator"
+							]
+						},
+						"description": "Generated from cURL: curl -X GET {{baseUrl}}/get-by-creator \\\n  -H \"Authorization: Bearer {{authToken}}\"\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get-all",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/leads/get-all",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"leads",
+								"get-all"
+							]
+						},
+						"description": "Generated from cURL: curl -X GET {{baseUrl}}/get-all \\\n  -H \"Authorization: Bearer {{authToken}}\"\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get-by-id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/leads/get-by-id?leadId=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"leads",
+								"get-by-id"
+							],
+							"query": [
+								{
+									"key": "leadId",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl -X GET \"{{baseUrl}}/get-by-id?leadId=1\" \\\n  -H \"Authorization: Bearer {{authToken}}\"\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "interaction",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"leadId\": 1,\n    \"restaurantId\": 1,\n    \"pocId\": 1,\n    \"callDuration\": 120,\n    \"interactionDetails\": \"Discussed platform demo and pricing negotiation.\",\n    \"interactionType\": \"PLATFORM_DEMO\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/interaction/create",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"interaction",
+								"create"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST {{baseUrl}}/create \\\n  -H \"Authorization: Bearer {{authToken}}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n        \"leadId\": 101,\n        \"restaurantId\": 201,\n        \"pocId\": 301,\n        \"callScheduleId\": 401,\n        \"callDuration\": 120,\n        \"interactionDetails\": \"Discussed platform demo and pricing negotiation.\",\n        \"interactionType\": \"PLATFORM_DEMO\"\n      }'\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get-by-lead",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/interaction/get-by-lead?leadId=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"interaction",
+								"get-by-lead"
+							],
+							"query": [
+								{
+									"key": "leadId",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl -X GET \"{{baseUrl}}/get-by-lead?leadId=101\" \\\n  -H \"Authorization: Bearer {{authToken}}\"\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get-by-restaurant",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/interaction/get-by-restaurant?restaurantId=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"interaction",
+								"get-by-restaurant"
+							],
+							"query": [
+								{
+									"key": "restaurantId",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl -X GET \"{{baseUrl}}/get-by-restaurant?restaurantId=201\" \\\n  -H \"Authorization: Bearer {{authToken}}\"\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get-by-call-schedule",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/interaction/get-by-call-schedule?callScheduleId=4",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"interaction",
+								"get-by-call-schedule"
+							],
+							"query": [
+								{
+									"key": "callScheduleId",
+									"value": "4"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl -X GET \"{{baseUrl}}/get-by-call-schedule?callScheduleId=401\" \\\n  -H \"Authorization: Bearer {{authToken}}\"\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get-by-poc",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/interaction/get-by-poc?pocId=6",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"interaction",
+								"get-by-poc"
+							],
+							"query": [
+								{
+									"key": "pocId",
+									"value": "6"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl -X GET \"{{baseUrl}}/get-by-poc?pocId=301\" \\\n  -H \"Authorization: Bearer {{authToken}}\"\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get-by-kam",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/interaction/get-by-kam?kamId=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"interaction",
+								"get-by-kam"
+							],
+							"query": [
+								{
+									"key": "kamId",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl -X GET \"{{baseUrl}}/get-by-kam?kamId=501\" \\\n  -H \"Authorization: Bearer {{authToken}}\"\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "order",
+			"item": [
+				{
+					"name": "update",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\": \"7ebe9aa1-0a86-48e6-bba1-ff81ea02921f\",\n    \"orderStatus\": \"SHIPPED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/orders/update-status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders",
+								"update-status"
+							]
+						},
+						"description": "Generated from cURL: curl -X PUT {{baseUrl}}/update/1a2b3c4d-5678-90ef-1234-567890abcdef/status \\\n  -H \"Authorization: Bearer {{authToken}}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n        \"orderId\": \"1a2b3c4d-5678-90ef-1234-567890abcdef\",\n        \"orderStatus\": \"SHIPPED\"\n      }'\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get-order",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/orders/7ebe9aa1-0a86-48e6-bba1-ff81ea02921f",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders",
+								"7ebe9aa1-0a86-48e6-bba1-ff81ea02921f"
+							]
+						},
+						"description": "Generated from cURL: curl -X GET \"{{baseUrl}}/get/1a2b3c4d-5678-90ef-1234-567890abcdef\" \\\n  -H \"Authorization: Bearer {{authToken}}\"\n"
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"restaurantId\": 1,\n    \"leadId\": 1,\n    \"interactionId\": 1,\n    \"orderAmount\": 250.75,\n    \"restaurantOrderId\": \"ORD12893290\",\n    \"currency\": \"INR\",\n    \"cartInfo\": \"Product A x 1, Product B x 2\",\n    \"shippingInfo\": \"123 Main St, City, State, ZIP\",\n    \"orderStatus\": \"PENDING\",\n    \"offer\": \"LOYALTY_POINTS\",\n    \"paymentMethod\": \"CREDIT_CARD\",\n    \"remarks\": \"Urgent delivery\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/orders/create",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders",
+								"create"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST {{baseUrl}}/create \\\n  -H \"Authorization: Bearer {{authToken}}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n        \"restaurantId\": 123,\n        \"leadId\": 456,\n        \"interactionId\": 789,\n        \"orderAmount\": 250.75,\n        \"currency\": \"USD\",\n        \"cartInfo\": \"Product A x 1, Product B x 2\",\n        \"shippingInfo\": \"123 Main St, City, State, ZIP\",\n        \"orderStatus\": \"PENDING\",\n        \"offer\": \"SUMMER2024\",\n        \"paymentMethod\": \"CREDIT_CARD\",\n        \"remarks\": \"Urgent delivery\",\n        \"createdBy\": 101\n      }'\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get-order-by-restaurant",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/orders/get-by-restaurant/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders",
+								"get-by-restaurant",
+								"1"
+							]
+						},
+						"description": "Generated from cURL: curl -X GET \"{{baseUrl}}/restaurant/123\" \\\n  -H \"Authorization: Bearer {{authToken}}\"\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "call-schedule",
+			"item": [
+				{
+					"name": "get-by-day",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"date\": \"2024-12-30\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/call-schedule/get-by-day",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"call-schedule",
+								"get-by-day"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST {{baseUrl}}/get-by-day \\\n  -H \"Authorization: Bearer {{authToken}}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n        \"date\": \"2024-12-30\"\n      }'\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get-by-id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/call-schedule/get?scheduleId=4",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"call-schedule",
+								"get"
+							],
+							"query": [
+								{
+									"key": "scheduleId",
+									"value": "4"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl -X GET \"{{baseUrl}}/get?scheduleId=123\" \\\n  -H \"Authorization: Bearer {{authToken}}\"\n"
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"leadId\": 1,\n    \"recurrenceType\": \"WEEKLY\",\n    \"preferredTime\": \"14:00:00\",\n    \"startDate\": \"2024-12-30T14:00:00\",\n    \"endDate\": \"2024-12-30T15:00:00\",\n    \"weeklyDays\": [\n        \"MONDAY\",\n        \"WEDNESDAY\",\n        \"FRIDAY\"\n    ],\n    \"timeZone\": \"Asia/Kolkata\",\n    \"active\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/call-schedule/create",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"call-schedule",
+								"create"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST {{baseUrl}}/create \\\n  -H \"Authorization: Bearer {{authToken}}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n        \"leadId\": 123,\n        \"recurrenceType\": \"WEEKLY\",\n        \"preferredTime\": \"14:00:00\",\n        \"startDate\": \"2024-12-30T14:00:00\",\n        \"endDate\": \"2024-12-30T15:00:00\",\n        \"weeklyDays\": [\"MONDAY\", \"WEDNESDAY\", \"FRIDAY\"],\n        \"timeZone\": \"Asia/Kolkata\",\n        \"isActive\": true\n      }'\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get-by-lead",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/call-schedule/get-by-lead?leadId=3",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"call-schedule",
+								"get-by-lead"
+							],
+							"query": [
+								{
+									"key": "leadId",
+									"value": "3"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl -X GET \"{{baseUrl}}/get-by-lead?leadId=456\" \\\n  -H \"Authorization: Bearer {{authToken}}\"\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "analytics",
+			"item": [
+				{
+					"name": "get-metric",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"metric\" : \"AVERAGE_ORDER_VALUE\",\n   \"timeframe\": \"DAILY\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/analytics/get-metrics",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"analytics",
+								"get-metrics"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST {{baseUrl}}/create \\\n  -H \"Authorization: Bearer {{authToken}}\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n        \"leadId\": 123,\n        \"recurrenceType\": \"WEEKLY\",\n        \"preferredTime\": \"14:00:00\",\n        \"startDate\": \"2024-12-30T14:00:00\",\n        \"endDate\": \"2024-12-30T15:00:00\",\n        \"weeklyDays\": [\"MONDAY\", \"WEDNESDAY\", \"FRIDAY\"],\n        \"timeZone\": \"Asia/Kolkata\",\n        \"isActive\": true\n      }'\n"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": ""
+		},
+		{
+			"key": "authToken",
+			"value": ""
+		}
+	]
+}

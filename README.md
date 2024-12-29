@@ -106,6 +106,24 @@ Once the application is set up:
 - To test various functionalities, you can interact with the provided APIs via tools like **Postman** or **cURL**.
 
 
+## Access Deployed Database ⚠️⚠️⚠️
+I've exposed the deployed postgres instance on tcp using pgadmin. Follow these steps to access the deployed database instance:
+- Go to https://psql.keshavcarpenter.tech
+- Use the following credentials to login:
+    - **Username**: admin
+    - **Password**: udaan
+  
+- Use below credentials to login in pgadmin
+- **Username**: hello@udaan.com
+- **Password**: udaan.com
+
+To access the db in the sidebar click on the server and then click on the database to view the schema and data.
+Or you can
+- Now login to the postgres server using these details
+- **Host**: http://localhost:6432
+- **Username**: root
+- **Password**: root
+
 ## Database Schema
 ![Database schema](/docs/database-schema.png)
 
