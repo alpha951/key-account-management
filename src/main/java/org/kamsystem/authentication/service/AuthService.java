@@ -30,12 +30,13 @@ public class AuthService implements IAuthService {
         }
 
         if (!kamUser.getIsActive()) {
-            throw new AuthException("User is not active");
+            throw new AuthException("User account is not active");
         }
 
         String authToken = jwtTokenProvider.generateToken(kamUser.getId(),
             kamUser.getRole());
-        return new UserLoginResponse(authToken);
+        return new UserLoginResponse(authToken, kamUser.getId(), kamUser.getName(), kamUser.getMobile(),
+            kamUser.getEmail(), kamUser.getRole());
     }
 
     @Override

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.kamsystem.callscheduling.model.CallSchedule;
 import org.kamsystem.callscheduling.model.DateRequest;
 import org.kamsystem.callscheduling.service.ICallScheduleService;
+import org.kamsystem.common.exception.InvalidRequestBodyException;
 import org.kamsystem.common.model.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +29,7 @@ public class CallScheduleController {
     public ResponseEntity<?> createSchedule(@RequestBody @Valid CallSchedule schedule,
         BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(new ApiResponse<>(false,
-                result.getAllErrors()), HttpStatus.BAD_REQUEST);
+            throw new InvalidRequestBodyException(result);
         }
         callScheduleService.createCallSchedule(schedule);
         return new ResponseEntity<>(new ApiResponse<>(true, "Call schedule created successfully"),

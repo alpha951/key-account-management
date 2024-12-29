@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import org.kamsystem.common.exception.InvalidRequestBodyException;
 import org.kamsystem.common.model.ApiResponse;
 import org.kamsystem.orders.model.Order;
 import org.kamsystem.orders.model.OrderStatusUpdateRequest;
@@ -29,8 +30,7 @@ public class OrderController {
     public ResponseEntity<?> createOrder(@RequestBody @Valid Order order,
         BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(new ApiResponse<>(false, result.getAllErrors()),
-                HttpStatus.BAD_REQUEST);
+            throw new InvalidRequestBodyException(result);
         }
         orderService.createOrder(order);
         return new ResponseEntity<>(new ApiResponse<>(true, "Order created successfully"),
@@ -41,8 +41,7 @@ public class OrderController {
     public ResponseEntity<?> updateOrderStatus(@RequestBody @Valid OrderStatusUpdateRequest request,
         BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(new ApiResponse<>(false, result.getAllErrors()),
-                HttpStatus.BAD_REQUEST);
+            throw new InvalidRequestBodyException(result);
         }
         orderService.updateOrderStatus(request.getOrderId(), request.getOrderStatus());
         return new ResponseEntity<>(new ApiResponse<>(true, "Order status updated successfully"),

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kamsystem.authentication.annotation.UserAuth;
 import org.kamsystem.common.enums.UserRole;
+import org.kamsystem.common.exception.InvalidRequestBodyException;
 import org.kamsystem.common.model.ApiResponse;
 import org.kamsystem.restaurant.exception.RestaurantException;
 import org.kamsystem.restaurant.model.Restaurant;
@@ -30,7 +31,11 @@ public class RestaurantController {
 
     @UserAuth(allowedFor = {UserRole.SUPER_ADMIN, UserRole.KEY_ACCOUNT_MANAGER})
     @PostMapping("/create")
-    public ResponseEntity<?> createRestaurant(@RequestBody Restaurant restaurant) {
+    public ResponseEntity<?> createRestaurant(@RequestBody @Valid Restaurant restaurant,
+        BindingResult result) {
+        if (result.hasErrors()) {
+            throw new InvalidRequestBodyException(result);
+        }
         restaurantService.createRestaurant(restaurant);
         return new ResponseEntity<>(new ApiResponse<>(true, "Restaurant created successfully"), HttpStatus.OK);
     }
@@ -40,7 +45,7 @@ public class RestaurantController {
     public ResponseEntity<?> updateRestaurant(@RequestBody @Valid Restaurant restaurant,
         BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(new ApiResponse<>(false, result.getAllErrors()), HttpStatus.BAD_REQUEST);
+            throw new InvalidRequestBodyException(result);
         }
         restaurantService.updateRestaurant(restaurant);
         return new ResponseEntity<>(new ApiResponse<>(true, "Restaurant updated successfully"), HttpStatus.OK);

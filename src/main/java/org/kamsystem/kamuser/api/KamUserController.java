@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.kamsystem.authentication.annotation.UserAuth;
 import org.kamsystem.common.enums.UserRole;
+import org.kamsystem.common.exception.InvalidRequestBodyException;
 import org.kamsystem.common.model.ApiResponse;
 import org.kamsystem.kamuser.dao.KamUser;
 import org.kamsystem.kamuser.model.KamUserUpdateModel;
@@ -29,7 +30,7 @@ public class KamUserController {
     @PostMapping("/create-user")
     public ResponseEntity<?> createKamUser(@RequestBody @Valid KamUser kamUser, BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(new ApiResponse<>(false, result.getAllErrors()), HttpStatus.BAD_REQUEST);
+            throw new InvalidRequestBodyException(result);
         }
         kamUserService.createUser(kamUser);
         return new ResponseEntity<>(new ApiResponse<>(true, "User created successfully"), HttpStatus.OK);
@@ -40,7 +41,7 @@ public class KamUserController {
     public ResponseEntity<?> updateKamUserRole(@RequestBody @Valid KamUserUpdateModel kamUserUpdateModel,
         BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(new ApiResponse<>(false, result.getAllErrors()), HttpStatus.BAD_REQUEST);
+            throw new InvalidRequestBodyException(result);
         }
         kamUserService.updateUserRole(kamUserUpdateModel);
         return new ResponseEntity<>(new ApiResponse<>(true, "User role updated successfully"), HttpStatus.OK);
@@ -50,7 +51,7 @@ public class KamUserController {
     @PostMapping("/update-kam-lead")
     public ResponseEntity<?> updateKamUser(@RequestBody @Valid UpdateKamRequest request, BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(new ApiResponse<>(false, result.getAllErrors()), HttpStatus.BAD_REQUEST);
+            throw new InvalidRequestBodyException(result);
         }
         UpdateKamResponse updateKamResponse = kamUserService.updateKam(request);
         return new ResponseEntity<>(new ApiResponse<>(true, updateKamResponse), HttpStatus.OK);

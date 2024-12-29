@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import org.kamsystem.authentication.annotation.UserAuth;
 import org.kamsystem.common.enums.UserRole;
+import org.kamsystem.common.exception.InvalidRequestBodyException;
 import org.kamsystem.common.model.ApiResponse;
 import org.kamsystem.leads.model.Lead;
 import org.kamsystem.leads.model.UpdateLeadStatusRequest;
@@ -29,8 +30,7 @@ public class LeadsController {
     @PostMapping("/create")
     public ResponseEntity<?> createLead(@RequestBody @Valid Lead lead, BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(new ApiResponse<>(false,
-                result.getAllErrors()), HttpStatus.BAD_REQUEST);
+            throw new InvalidRequestBodyException(result);
         }
         leadService.createLead(lead);
         ApiResponse<String> body = new ApiResponse<>(true, "Lead created successfully");
@@ -42,8 +42,7 @@ public class LeadsController {
     public ResponseEntity<?> updateLeadStatus(@RequestBody @Valid UpdateLeadStatusRequest request,
         BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(new ApiResponse<>(false,
-                result.getAllErrors()), HttpStatus.BAD_REQUEST);
+            throw new InvalidRequestBodyException(result);
         }
         leadService.updateLeadStatus(request);
         ApiResponse<String> body = new ApiResponse<>(true, "Lead status updated successfully");

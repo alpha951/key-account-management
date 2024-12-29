@@ -1,6 +1,8 @@
 package org.kamsystem.common.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.kamsystem.common.constants.DtoConstants;
 import org.kamsystem.common.model.ApiResponse;
@@ -36,7 +38,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {NoHandlerFoundException.class})
     public ResponseEntity<?> processControllerInvalidUrlException(HttpServletRequest request,
         NoHandlerFoundException ex) {
-        log.info("Global Exception Handler - NoHandlerFoundException, Invalid request URL : {}, IP Address: {}, User Agent: {}",
+        log.info(
+            "Global Exception Handler - NoHandlerFoundException, Invalid request URL : {}, IP Address: {}, User Agent: {}",
             request.getRequestURL(), request.getHeader("X-Forwarded-For"), request.getHeader("User-Agent"), ex);
         ApiResponse<String> body = new ApiResponse<>(false, "Invalid request URL");
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
@@ -49,7 +52,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class})
     public ResponseEntity<?> processControllerInvalidMethodArgsException(HttpServletRequest request,
         MethodArgumentTypeMismatchException ex) {
-        log.debug("Global Exception Handler - MethodArgumentTypeMismatchException, url: {}, Invalid request", request.getRequestURL(),
+        log.debug(
+            "Global Exception Handler - MethodArgumentTypeMismatchException, url: {}, Invalid request, trace : {}",
+            request.getRequestURL(), ex.getStackTrace(),
             ex);
         ApiResponse<String> body = new ApiResponse<>(false, "Invalid request");
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
@@ -61,7 +66,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {HttpMessageNotReadableException.class})
     public ResponseEntity<?> processControllerInvalidRequestException(HttpServletRequest request,
         HttpMessageNotReadableException ex) {
-        log.debug("Global Exception Handler - HttpMessageNotReadableException, url: {}, Invalid request body", request.getRequestURL(), ex);
+        log.debug(
+            "Global Exception Handler - HttpMessageNotReadableException, url: {}, Invalid request body, trace : {}",
+            request.getRequestURL(), ex.getStackTrace(), ex);
         ApiResponse<String> body = new ApiResponse<>(false, "Invalid request body");
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
@@ -72,7 +79,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {HttpRequestMethodNotSupportedException.class})
     public ResponseEntity<?> processControllerHttpMethodException(HttpServletRequest request,
         HttpRequestMethodNotSupportedException ex) {
-        log.error("Global Exception Handler - UnsupportedHttpMethodException, url: {}, Http method not allowed", request.getRequestURL());
+        log.error("Global Exception Handler - UnsupportedHttpMethodException, url: {}, Http method not allowed",
+            request.getRequestURL());
         ApiResponse<String> body = new ApiResponse<>(false, "Http method not allowed");
         return new ResponseEntity<>(body, HttpStatus.METHOD_NOT_ALLOWED);
     }
@@ -82,16 +90,18 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = {DataAccessException.class})
     public ResponseEntity<?> processControllerDataAccessException(HttpServletRequest request, DataAccessException ex) {
-        log.error(" Exception Handler - DataAccessException, url: {}, message: {}", request.getRequestURL(),
-            DtoConstants.RESOURCE_NOT_FOUND, ex);
+        log.error(" Exception Handler - DataAccessException, url: {}, message: {} , trace: {}", request.getRequestURL(),
+            DtoConstants.RESOURCE_NOT_FOUND, ex.getStackTrace(), ex);
         ApiResponse<String> body = new ApiResponse<>(false, DtoConstants.RESOURCE_NOT_FOUND);
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = {BadSqlGrammarException.class})
-    public ResponseEntity<?> processControllerBadSqlGrammarException(HttpServletRequest request, BadSqlGrammarException ex) {
-        log.error(" Exception Handler - BadSqlGrammarException, url: {}, message: {}", request.getRequestURL(),
-            DtoConstants.RESOURCE_NOT_FOUND, ex);
+    public ResponseEntity<?> processControllerBadSqlGrammarException(HttpServletRequest request,
+        BadSqlGrammarException ex) {
+        log.error(" Exception Handler - BadSqlGrammarException, url: {}, message: {}, trace: {}",
+            request.getRequestURL(),
+            DtoConstants.RESOURCE_NOT_FOUND, ex.getStackTrace(), ex);
         ApiResponse<String> body = new ApiResponse<>(false, DtoConstants.GENERIC_ERROR_MSG);
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -101,9 +111,23 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = {InvalidMobileException.class})
     public ResponseEntity<?> processInvalidMobileException(HttpServletRequest request, InvalidMobileException ex) {
-        log.error("Global Exception Handler - InvalidMobileException, url: {}, message: {}", request.getRequestURL(),
-            ex.getMessage(), ex);
+        log.error("Global Exception Handler - InvalidMobileException, url: {}, message: {}, trace : {}",
+            request.getRequestURL(),
+            ex.getMessage(), ex.getStackTrace(), ex);
         ApiResponse<String> body = new ApiResponse<>(false, ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidRequestBodyException.class)
+    public ResponseEntity<ApiResponse<?>> handleInvalidRequestBody(InvalidRequestBodyException ex) {
+        Map<String, String> errors = new HashMap<>();
+
+        ex.getFieldErrors().forEach(error ->
+            errors.put(error.getField(), error.getDefaultMessage())
+        );
+
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(new ApiResponse<>(400, errors));
     }
 }

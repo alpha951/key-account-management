@@ -3,6 +3,7 @@ package org.kamsystem.restaurantpoc.api;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.kamsystem.common.exception.InvalidRequestBodyException;
 import org.kamsystem.common.model.ApiResponse;
 import org.kamsystem.restaurantpoc.model.Poc;
 import org.kamsystem.restaurantpoc.model.PocUpdateRequest;
@@ -27,8 +28,7 @@ public class PocController {
     @PostMapping("/create")
     public ResponseEntity<?> createPoc(@RequestBody @Valid Poc poc, BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(new ApiResponse<>(false,
-                result.getAllErrors()), HttpStatus.BAD_REQUEST);
+            throw new InvalidRequestBodyException(result);
         }
 
         pocService.createPoc(poc);
@@ -38,8 +38,7 @@ public class PocController {
     @PostMapping("/update")
     public ResponseEntity<?> updatePoc(@RequestBody @Valid PocUpdateRequest request, BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(new ApiResponse<>(false,
-                result.getAllErrors()), HttpStatus.BAD_REQUEST);
+            throw new InvalidRequestBodyException(result);
         }
 
         pocService.updatePoc(request);

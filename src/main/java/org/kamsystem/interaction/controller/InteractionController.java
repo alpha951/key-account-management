@@ -3,6 +3,7 @@ package org.kamsystem.interaction.controller;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.kamsystem.common.exception.InvalidRequestBodyException;
 import org.kamsystem.common.model.ApiResponse;
 import org.kamsystem.interaction.model.Interaction;
 import org.kamsystem.interaction.service.IInteractionService;
@@ -27,8 +28,7 @@ public class InteractionController {
     public ResponseEntity<?> createInteraction(@RequestBody @Valid
     Interaction interaction, BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(new ApiResponse<>(false,
-                result.getAllErrors()), HttpStatus.BAD_REQUEST);
+            throw new InvalidRequestBodyException(result);
         }
 
         interactionService.createInteraction(interaction);
