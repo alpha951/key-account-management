@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.kamsystem.analytics.dao.KamMetric;
 import org.kamsystem.analytics.model.MetricRequest;
 import org.kamsystem.analytics.service.MetricService;
+import org.kamsystem.common.exception.InvalidRequestBodyException;
 import org.kamsystem.common.model.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +26,7 @@ public class AnalyticsController {
     @PostMapping("/get-metrics")
     public ResponseEntity<?> getMetric(@RequestBody @Valid MetricRequest request, BindingResult result){
         if(result.hasErrors()){
-            return new ResponseEntity<>(new ApiResponse<>(false, result.getAllErrors()),
-                HttpStatus.BAD_REQUEST);
+            throw new InvalidRequestBodyException(result);
         }
         List<KamMetric> metrics = metricService.getMetrics(request.getMetric(), request.getTimeframe());
         return new ResponseEntity<>(new ApiResponse<>(true, metrics), HttpStatus.OK);
