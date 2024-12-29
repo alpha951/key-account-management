@@ -32,7 +32,8 @@ public class RestaurantService implements IRestaurantService {
         Long userId = authService.getUserIdOfLoggedInUser();
         UserRole role = authService.getRoleOfLoggedInUser();
 
-        if (!role.equals(UserRole.SUPER_ADMIN) && !userId.equals(restaurant.getCreatedBy())) {
+        Restaurant restaurantFromDb = restaurantRepository.getRestaurantById(restaurant.getId());
+        if (!role.equals(UserRole.SUPER_ADMIN) && !userId.equals(restaurantFromDb.getCreatedBy())) {
             throw new RestaurantException(RestaurantErrorCode.RESTAURANT_NOT_FOUND,
                 "You are not allowed to update this restaurant");
         }
