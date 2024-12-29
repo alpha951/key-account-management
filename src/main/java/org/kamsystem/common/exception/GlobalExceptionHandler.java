@@ -63,7 +63,7 @@ public class GlobalExceptionHandler {
             ex);
         ApiResponse<String> body = new ApiResponse<>(ApiError.INVALID_REQUEST_PARAMS.getCode(), Map.of(
             DtoConstants.ERROR_MESSAGE_KEY,
-            ex.getMessage()));
+            DtoConstants.INVALID_REQUEST_ARGUMENTS));
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
@@ -78,7 +78,7 @@ public class GlobalExceptionHandler {
             request.getRequestURL(), ex.getStackTrace(), ex);
         ApiResponse<String> body = new ApiResponse<>(ApiError.INVALID_REQUEST_BODY.getCode(), Map.of(
             DtoConstants.ERROR_MESSAGE_KEY,
-            ex.getMessage()));
+            DtoConstants.JSON_PARSING_ERROR));
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
