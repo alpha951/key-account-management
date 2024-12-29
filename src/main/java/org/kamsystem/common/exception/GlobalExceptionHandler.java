@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.kamsystem.common.constants.DtoConstants;
+import org.kamsystem.common.enums.ApiError;
 import org.kamsystem.common.model.ApiResponse;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> processControllerException(HttpServletRequest request, Exception ex) {
         log.error("Global Exception Handler - Exception, url: {}, message: {}, trace : {}", request.getRequestURL(),
             DtoConstants.GENERIC_ERROR_MSG, ex.getStackTrace(), ex);
-        ApiResponse<String> body = new ApiResponse<>(false, DtoConstants.GENERIC_ERROR_MSG);
+        ApiResponse<String> body = new ApiResponse<>(ApiError.SERVER_ISSUE.getCode(), Map.of(
+            DtoConstants.ERROR_MESSAGE_KEY,
+            DtoConstants.GENERIC_ERROR_MSG));
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -41,7 +44,9 @@ public class GlobalExceptionHandler {
         log.info(
             "Global Exception Handler - NoHandlerFoundException, Invalid request URL : {}, IP Address: {}, User Agent: {}",
             request.getRequestURL(), request.getHeader("X-Forwarded-For"), request.getHeader("User-Agent"), ex);
-        ApiResponse<String> body = new ApiResponse<>(false, "Invalid request URL");
+        ApiResponse<String> body = new ApiResponse<>(ApiError.INVALID_REQUEST.getCode(), Map.of(
+            DtoConstants.ERROR_MESSAGE_KEY,
+            DtoConstants.RESOURCE_NOT_FOUND));
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
@@ -56,7 +61,9 @@ public class GlobalExceptionHandler {
             "Global Exception Handler - MethodArgumentTypeMismatchException, url: {}, Invalid request, trace : {}",
             request.getRequestURL(), ex.getStackTrace(),
             ex);
-        ApiResponse<String> body = new ApiResponse<>(false, "Invalid request");
+        ApiResponse<String> body = new ApiResponse<>(ApiError.INVALID_REQUEST_PARAMS.getCode(), Map.of(
+            DtoConstants.ERROR_MESSAGE_KEY,
+            ex.getMessage()));
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
@@ -69,7 +76,9 @@ public class GlobalExceptionHandler {
         log.debug(
             "Global Exception Handler - HttpMessageNotReadableException, url: {}, Invalid request body, trace : {}",
             request.getRequestURL(), ex.getStackTrace(), ex);
-        ApiResponse<String> body = new ApiResponse<>(false, "Invalid request body");
+        ApiResponse<String> body = new ApiResponse<>(ApiError.INVALID_REQUEST_BODY.getCode(), Map.of(
+            DtoConstants.ERROR_MESSAGE_KEY,
+            ex.getMessage()));
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
@@ -81,7 +90,9 @@ public class GlobalExceptionHandler {
         HttpRequestMethodNotSupportedException ex) {
         log.error("Global Exception Handler - UnsupportedHttpMethodException, url: {}, Http method not allowed",
             request.getRequestURL());
-        ApiResponse<String> body = new ApiResponse<>(false, "Http method not allowed");
+        ApiResponse<String> body = new ApiResponse<>(ApiError.INVALID_REQUEST.getCode(), Map.of(
+            DtoConstants.ERROR_MESSAGE_KEY,
+            DtoConstants.METHOD_NOT_ALLOWED));
         return new ResponseEntity<>(body, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
@@ -92,7 +103,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> processControllerDataAccessException(HttpServletRequest request, DataAccessException ex) {
         log.error(" Exception Handler - DataAccessException, url: {}, message: {} , trace: {}", request.getRequestURL(),
             DtoConstants.RESOURCE_NOT_FOUND, ex.getStackTrace(), ex);
-        ApiResponse<String> body = new ApiResponse<>(false, DtoConstants.RESOURCE_NOT_FOUND);
+        ApiResponse<String> body = new ApiResponse<>(ApiError.RESOURCE_NOT_FOUND.getCode(), Map.of(
+            DtoConstants.ERROR_MESSAGE_KEY,
+            DtoConstants.RESOURCE_NOT_FOUND));
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
@@ -102,19 +115,24 @@ public class GlobalExceptionHandler {
         log.error(" Exception Handler - BadSqlGrammarException, url: {}, message: {}, trace: {}",
             request.getRequestURL(),
             DtoConstants.RESOURCE_NOT_FOUND, ex.getStackTrace(), ex);
-        ApiResponse<String> body = new ApiResponse<>(false, DtoConstants.GENERIC_ERROR_MSG);
+
+        ApiResponse<String> body = new ApiResponse<>(ApiError.SERVER_ISSUE.getCode(),
+            Map.of(DtoConstants.ERROR_MESSAGE_KEY,
+                DtoConstants.GENERIC_ERROR_MSG));
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
-     * Custom exception for invalid mobile number
+     * Custom exception for invalid mobile number that does not match the pattern
      */
     @ExceptionHandler(value = {InvalidMobileException.class})
     public ResponseEntity<?> processInvalidMobileException(HttpServletRequest request, InvalidMobileException ex) {
         log.error("Global Exception Handler - InvalidMobileException, url: {}, message: {}, trace : {}",
             request.getRequestURL(),
             ex.getMessage(), ex.getStackTrace(), ex);
-        ApiResponse<String> body = new ApiResponse<>(false, ex.getMessage());
+        Map<String, String> errors = new HashMap<>();
+        errors.put(DtoConstants.ERROR_MESSAGE_KEY, ex.getMessage());
+        ApiResponse<String> body = new ApiResponse<>(ApiError.INVALID_MOBILE.getCode(), errors);
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
@@ -128,6 +146,6 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body(new ApiResponse<>(400, errors));
+            .body(new ApiResponse<>(ApiError.INVALID_REQUEST_BODY.getCode(), errors));
     }
 }
