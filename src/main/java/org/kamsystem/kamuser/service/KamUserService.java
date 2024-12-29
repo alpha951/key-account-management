@@ -26,11 +26,12 @@ public class KamUserService implements IKamUserService {
     private final ILeadRepository leadRepository;
     private final IRestaurantRepository restaurantRepository;
     private final IPocRepository pocRepository;
+    private final PasswordUtil passwordUtil;
 
     @Override
     public void createUser(KamUser kamUser) {
         String sanitizedMobile = MobileUtils.sanitizeMobile(kamUser.getMobile());
-        String hashedPassword = PasswordUtil.hashPassword(kamUser.getPassword());
+        String hashedPassword = passwordUtil.hashPassword(kamUser.getPassword());
 
         kamUserRepository.createUser(sanitizedMobile, kamUser.getName(), hashedPassword,
             kamUser.getRole().getId(), kamUser.getEmployeeId(), kamUser.getEmail(),

@@ -35,6 +35,11 @@ public class CallSchedule {
     private Date createdDate;
     private Date updatedDate;
 
+    public CallSchedule(long l, Long leadId, RecurrenceType recurrenceType, LocalTime parse, LocalDateTime parse1,
+        LocalDateTime parse2, Set<DayOfWeek> weeklyDays, String s, boolean b, Date date,
+        Date date1) {
+    }
+
     public enum RecurrenceType {
         DAILY,
         WEEKLY,

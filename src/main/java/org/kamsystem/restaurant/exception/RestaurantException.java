@@ -1,5 +1,8 @@
 package org.kamsystem.restaurant.exception;
 
+import lombok.Getter;
+
+@Getter
 public class RestaurantException extends RuntimeException {
 
     private RestaurantErrorCode errorCode;

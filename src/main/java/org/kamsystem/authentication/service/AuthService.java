@@ -19,13 +19,14 @@ public class AuthService implements IAuthService {
 
     private final IKamUserService kamUserService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final PasswordUtil passwordUtil;
 
     @Override
     public UserLoginResponse login(String mobile, String password) {
         String sanitizedMobile = MobileUtils.sanitizeMobile(mobile);
         KamUser kamUser = kamUserService.getUserByMobile(sanitizedMobile);
 
-        if (!PasswordUtil.matches(password, kamUser.getPassword())) {
+        if (!passwordUtil.matches(password, kamUser.getPassword())) {
             throw new AuthException("Invalid password");
         }
 
