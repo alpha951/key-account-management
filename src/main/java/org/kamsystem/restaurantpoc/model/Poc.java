@@ -23,8 +23,8 @@ public class Poc {
     @NonNull
     private PocRole pocRole;
     @NonNull
-    @Size(min = 3, max = 320) // email can be 320 characters long
-    private String contact;  // can be mobile number or email
+    @Size(min = 10, max = 13)
+    private String contact;
     private Long createdBy;
     private Date createdAt;
     private Date updateAt;

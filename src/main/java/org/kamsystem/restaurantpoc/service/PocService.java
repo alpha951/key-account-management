@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import org.kamsystem.authentication.service.IAuthService;
 import org.kamsystem.common.enums.UserRole;
+import org.kamsystem.common.utils.MobileUtils;
 import org.kamsystem.restaurantpoc.model.Poc;
 import org.kamsystem.restaurantpoc.model.PocUpdateRequest;
 import org.kamsystem.restaurantpoc.repository.IPocRepository;
@@ -21,8 +22,10 @@ public class PocService implements IPocService {
 
     @Override
     public void createPoc(Poc poc) {
+        String sanitizedContact = MobileUtils.sanitizeMobile(poc.getContact());
         Long userId = authService.getUserIdOfLoggedInUser();
         poc.setCreatedBy(userId);
+        poc.setContact(sanitizedContact);
         pocRepository.createPoc(poc);
     }
 
