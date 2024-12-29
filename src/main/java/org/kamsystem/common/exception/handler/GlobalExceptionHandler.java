@@ -1,4 +1,4 @@
-package org.kamsystem.common.exception;
+package org.kamsystem.common.exception.handler;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -6,6 +6,9 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.kamsystem.common.constants.DtoConstants;
 import org.kamsystem.common.enums.ApiError;
+import org.kamsystem.common.exception.DatabaseOperationException;
+import org.kamsystem.common.exception.InvalidMobileException;
+import org.kamsystem.common.exception.InvalidRequestBodyException;
 import org.kamsystem.common.model.ApiResponse;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -120,6 +123,18 @@ public class GlobalExceptionHandler {
             Map.of(DtoConstants.ERROR_MESSAGE_KEY,
                 DtoConstants.GENERIC_ERROR_MSG));
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(DatabaseOperationException.class)
+    public ResponseEntity<ApiResponse<?>> handleDatabaseOperationException(DatabaseOperationException ex) {
+        log.error("Global Exception Handler - DatabaseOperationException, message: {}, trace: {}",
+            ex.getMessage(), ex.getStackTrace(), ex);
+        return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(new ApiResponse<>(ApiError.SERVER_ISSUE.getCode(), Map.of(
+                DtoConstants.ERROR_MESSAGE_KEY,
+                ex.getMessage()
+            )));
     }
 
     /**

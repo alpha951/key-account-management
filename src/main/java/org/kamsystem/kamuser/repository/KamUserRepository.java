@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
 import org.kamsystem.common.enums.UserRole;
+import org.kamsystem.common.exception.DatabaseOperationException;
 import org.kamsystem.kamuser.dao.KamUser;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -43,7 +44,10 @@ public class KamUserRepository implements IKamUserRepository {
         mapSqlParameterSource.addValue("mobile", mobile);
         mapSqlParameterSource.addValue("role", role);
         mapSqlParameterSource.addValue("isActive", isActive);
-        namedParameterJdbcTemplate.update(UPDATE_USER_ROLE, mapSqlParameterSource);
+        int rowsAffected = namedParameterJdbcTemplate.update(UPDATE_USER_ROLE, mapSqlParameterSource);
+        if (rowsAffected == 0) {
+            throw new DatabaseOperationException("No user found with mobile: " + mobile);
+        }
     }
 
     @Override

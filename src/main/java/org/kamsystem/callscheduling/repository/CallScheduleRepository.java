@@ -120,7 +120,10 @@ public class CallScheduleRepository implements ICallScheduleRepository {
         MapSqlParameterSource params = new MapSqlParameterSource()
             .addValue("id", callScheduleId)
             .addValue("lastCallDate", Timestamp.valueOf(lastCallDate.atStartOfDay()));
-        namedParameterJdbcTemplate.update(UPDATE_LAST_CALL_DATE, params);
+       int rowsAffected = namedParameterJdbcTemplate.update(UPDATE_LAST_CALL_DATE, params);
+         if (rowsAffected == 0) {
+              throw new RuntimeException("No call schedule found with id: " + callScheduleId);
+         }
     }
 
     private final RowMapper<CallSchedule> rowMapper = (rs, rowNum) -> {

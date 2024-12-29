@@ -15,7 +15,7 @@ public class AuditRepository implements IAuditRepository {
         + "(old_kam_id, new_kam_id, entity_type, entity_id) VALUES (:oldKamId, :newKamId, :entityType, :entityId)";
 
     @Override
-    public void updateAudit(Long oldKamId, Long newKamId, String entityType, Long entityId) {
+    public void insertAudit(Long oldKamId, Long newKamId, String entityType, Long entityId) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("oldKamId", oldKamId);
         mapSqlParameterSource.addValue("newKamId", newKamId);

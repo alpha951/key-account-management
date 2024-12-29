@@ -20,17 +20,17 @@ public class AuditService implements IAuditService {
         Long oldKamId = kamAuditLog.getOldKamId();
         Long newKamId = kamAuditLog.getNewKamId();
         kamAuditLog.getLeadsAffected().forEach(lead -> {
-            auditRepository.updateAudit(oldKamId, newKamId,
+            auditRepository.insertAudit(oldKamId, newKamId,
                 EntityType.LEAD.name(), lead.getId());
         });
 
         kamAuditLog.getPocsAffected().forEach(poc -> {
-            auditRepository.updateAudit(oldKamId, newKamId,
+            auditRepository.insertAudit(oldKamId, newKamId,
                 EntityType.POC.name(), poc.getId());
         });
 
         kamAuditLog.getRestaurantsAffected().forEach(restaurant -> {
-            auditRepository.updateAudit(oldKamId, newKamId,
+            auditRepository.insertAudit(oldKamId, newKamId,
                 EntityType.RESTAURANT.name(), restaurant.getId());
         });
     }

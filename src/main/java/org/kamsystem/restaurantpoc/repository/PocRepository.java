@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
+import org.kamsystem.common.exception.DatabaseOperationException;
 import org.kamsystem.restaurantpoc.model.Poc;
 import org.kamsystem.restaurantpoc.model.PocRole;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -68,7 +69,10 @@ public class PocRepository implements IPocRepository {
         paramSource.addValue("name", name);
         paramSource.addValue("contact", contact);
         paramSource.addValue("role", role);
-        namedParameterJdbcTemplate.update(UPDATE_POC, paramSource);
+        int affectedRows = namedParameterJdbcTemplate.update(UPDATE_POC, paramSource);
+        if (affectedRows == 0) {
+            throw new DatabaseOperationException("No POC found with id: " + id);
+        }
     }
 
     @Override
@@ -118,7 +122,10 @@ public class PocRepository implements IPocRepository {
         MapSqlParameterSource paramSource = new MapSqlParameterSource();
         paramSource.addValue("oldCreatedBy", oldCreatorId);
         paramSource.addValue("newCreatedBy", newCreatorId);
-        namedParameterJdbcTemplate.update(UPDATE_POC_CREATOR, paramSource);
+        int affectedRows = namedParameterJdbcTemplate.update(UPDATE_POC_CREATOR, paramSource);
+        if(affectedRows == 0) {
+            throw new DatabaseOperationException("No POC found with creator id: " + oldCreatorId);
+        }
     }
 
     private Poc translateResultSetToPoc(ResultSet rs) throws SQLException {

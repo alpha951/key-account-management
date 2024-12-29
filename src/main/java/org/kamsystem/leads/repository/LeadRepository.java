@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.kamsystem.common.exception.DatabaseOperationException;
 import org.kamsystem.leads.model.Lead;
 import org.kamsystem.leads.model.LeadStatus;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -48,7 +49,10 @@ public class LeadRepository implements ILeadRepository {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("leadId", leadId);
         params.addValue("leadStatus", status);
-        namedParameterJdbcTemplate.update(UPDATE_LEAD_STATUS, params);
+        int affectedRows = namedParameterJdbcTemplate.update(UPDATE_LEAD_STATUS, params);
+        if (affectedRows == 0) {
+            throw new DatabaseOperationException("No lead found with id: " + leadId);
+        }
     }
 
     @Override
@@ -88,7 +92,10 @@ public class LeadRepository implements ILeadRepository {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("oldCreatorId", oldCreatorId);
         params.addValue("newCreatorId", newCreatorId);
-        namedParameterJdbcTemplate.update(UPDATE_LEAD_CREATOR, params);
+        int rowsAffected = namedParameterJdbcTemplate.update(UPDATE_LEAD_CREATOR, params);
+        if (rowsAffected == 0) {
+            throw new DatabaseOperationException("No lead found with creator id: " + oldCreatorId);
+        }
     }
 
 

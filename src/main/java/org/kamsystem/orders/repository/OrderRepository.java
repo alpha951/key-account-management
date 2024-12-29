@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import org.kamsystem.common.exception.DatabaseOperationException;
 import org.kamsystem.orders.enums.Currency;
 import org.kamsystem.orders.enums.Offers;
 import org.kamsystem.orders.enums.OrderStatus;
@@ -71,7 +72,10 @@ public class OrderRepository implements IOrderRepository {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("orderId", orderId);
         parameterSource.addValue("orderStatus", orderStatus);
-        namedParameterJdbcTemplate.update(UPDATE_ORDER_STATUS, parameterSource);
+        int rowsAffected = namedParameterJdbcTemplate.update(UPDATE_ORDER_STATUS, parameterSource);
+        if (rowsAffected == 0) {
+            throw new DatabaseOperationException("No order found with id: " + orderId);
+        }
     }
 
     @Override

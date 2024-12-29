@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.kamsystem.common.exception.DatabaseOperationException;
 import org.kamsystem.restaurant.model.Restaurant;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -48,7 +49,10 @@ public class RestaurantRepository implements IRestaurantRepository {
     public void updateRestaurant(Restaurant restaurant) {
         MapSqlParameterSource mapSqlParameterSource = formParamSource(restaurant);
         mapSqlParameterSource.addValue("id", restaurant.getId());
-        namedParameterJdbcTemplate.update(UPDATE_RESTAURANT, mapSqlParameterSource);
+        int affectedRows = namedParameterJdbcTemplate.update(UPDATE_RESTAURANT, mapSqlParameterSource);
+        if (affectedRows == 0) {
+            throw new DatabaseOperationException("No restaurant found with id: " + restaurant.getId());
+        }
     }
 
     @Override
@@ -90,8 +94,11 @@ public class RestaurantRepository implements IRestaurantRepository {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("oldCreatedBy", oldCreatorId);
         mapSqlParameterSource.addValue("newCreatedBy", newCreatorId);
-        namedParameterJdbcTemplate.update(UPDATE_RESTAURANT_CREATOR,
+        int affectedRows = namedParameterJdbcTemplate.update(UPDATE_RESTAURANT_CREATOR,
             mapSqlParameterSource);
+        if (affectedRows == 0) {
+            throw new DatabaseOperationException("No restaurant found with creator id: " + oldCreatorId);
+        }
     }
 
 
