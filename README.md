@@ -9,13 +9,14 @@ Key features of the system include:
 - Lead management with status tracking
 - Interaction and order management between key accounts and restaurants
 - Call scheduling for follow-up interactions
-- Analytics and audit logs for system changes and performance metrics
+- Setup of cron jobs to get analytics on various metrics for different time frame with persisting historical metrics in database.
+- Storing KAM related changes in audit change log table for record purpose.
 
 ## System Requirements
 
 - **Java**: 17 or higher
 - **Spring Boot**: 2.5 or higher
-- **PostgreSQL**: 13 or higher
+- **PostgresSQL**: 13 or higher
 - **Maven**: 3.8 or higher
 - **JDK**: 17 or higher
 - **IDE**: IntelliJ IDEA, Eclipse, or similar
@@ -31,9 +32,9 @@ Follow these steps to set up the project locally:
    cd key-account-management
    ```
 
-2. **Install dependencies** 
+2. **Setting up the project** 
 
-### Using Docker Compose (Recommended for development and testing)
+### Single command setup using Docker Compose (Recommended for development and testing)
 Simply run below command this will complete the whole setup including downloading dependencies, running schema.sql and data.sql for seed data
 and spinning up the server. This will expose the database on port 6432 on your local machine.
 
@@ -67,12 +68,14 @@ For database system you can run a docker container with below command this will 
 ```
 To access this database in any db viewer like DBeaver use below details:
 
+```text
+    databse_name=postgres
+    user=root
+    password=root
+    connection=jdbc:postgresql://localhost:6432/postgres
 ```
-databse_name=postgres
-user=root
-password=root
-connection=jdbc:postgresql://localhost:6432/postgres
-```
+
+Now you can manually run `/src/main/resorces/db/schem.sql` and `data.sql` to create schema and populate seed data into your database instance. 
     
 You can also create database in your machine's postgres installation and update the application.properties accordingly.    
 
@@ -109,151 +112,25 @@ Once the application is set up:
 
 ## API Documentation
 
-### 1. Authentication
+The complete API docs can be found in this [postman collection](https://www.postman.com/spaceflight-candidate-61154118/workspace/kam-apis-demo/collection/40691637-00317fdc-204b-470d-a6a0-57dcd5e8d8cf?action=share&creator=40691637&active-environment=40691637-9f8791df-d7cf-47bc-828b-801c5882f115). I've setup two different environments for testing. Please select the `prod` env for testing the API without any additional setup.
+For those APIs which perform some kind of Data manipulation operations use some new data in request body instead of existing one present in the postman collection. As existing data may give error responses. 
 
-- **POST /api/auth/login**: Login endpoint to authenticate users.
-  - **Request**: 
-    ```json
-    {
-      "mobile": "9999999991",
-      "password": "password"
-    }
-    ```
-  - **Response**: 
-    ```json
-    {
-      "token": "jwt_token_here"
-    }
-    ```
-    
-> For all below api use the jwt token in 'Authorization' header as they are protected routes
+> For Admin user login using below credentials :
 
-### 2. Lead Management
+```json
+{
+    "mobile" : "9999999991",
+    "password": "password"
+}
+```
 
-- **GET /api/leads**: Retrieve all leads.
-- **POST /api/leads**: Create a new lead.
-  - **Request**: 
-    ```json
-    {
-      "restaurantId": 123,
-      "createdBy": 456,
-      "leadStatus": 1
-    }
-    ```
-
-### 3. Interaction
-
-- **GET /api/interactions**: Get all interactions.
-- **POST /api/interactions**: Create a new interaction.
-  - **Request**:
-    ```json
-    {
-      "callerId": 123,
-      "leadId": 456,
-      "interactionDetails": "Details about the interaction",
-      "interactionType": "CALL"
-    }
-    ```
-
-### 4. Call Scheduling
-
-- **GET /api/call-schedules**: Get all call schedules.
-- **POST /api/call-schedules**: Schedule a new call.
-  - **Request**:
-    ```json
-    {
-      "leadId": 789,
-      "startDate": "2024-01-01T10:00:00",
-      "endDate": "2024-01-01T11:00:00",
-      "timeZone": "Asia/Kolkata"
-    }
-    ```
-
-### 5. Orders
-
-- **GET /api/orders**: Retrieve all orders.
-- **POST /api/orders**: Place a new order.
-  - **Request**:
-    ```json
-    {
-      "leadId": 123,
-      "restaurantId": 456,
-      "orderId": "uuid_here",
-      "amount": 5000
-    }
-    ```
-
-### 6. Analytics
-
-- **GET /api/analytics/metrics**: Retrieve key metrics.
-- **POST /api/analytics/metrics**: Submit new metric data.
-  - **Request**:
-    ```json
-    {
-      "metricName": "Order Frequency",
-      "metricValue": 100,
-      "metricValueType": "COUNT",
-      "timeframe": "monthly",
-      "year": 2024,
-      "month": 12,
-      "day": 25
-    }
-    ```
-
-## Sample Usage Examples
-
-1. **Login**: To authenticate and receive a JWT token:
-   ```bash
-   POST /api/auth/login
-   ```
-   Body:
-   ```json
-   {
-     "email": "user@example.com",
-     "password": "password"
-   }
-   ```
-
-2. **Create a Lead**:
-   ```bash
-   POST /api/leads
-   ```
-   Body:
-   ```json
-   {
-     "restaurantId": 123,
-     "createdBy": 456,
-     "leadStatus": 1
-   }
-   ```
-
-3. **Schedule a Call**:
-   ```bash
-   POST /api/call-schedules
-   ```
-   Body:
-   ```json
-   {
-     "leadId": 789,
-     "startDate": "2024-01-01T10:00:00",
-     "endDate": "2024-01-01T11:00:00",
-     "timeZone": "Asia/Kolkata"
-   }
-   ```
-
-4. **Place an Order**:
-   ```bash
-   POST /api/orders
-   ```
-   Body:
-   ```json
-   {
-     "leadId": 123,
-     "restaurantId": 456,
-     "orderId": "uuid_here",
-     "amount": 5000
-   }
-   ```
+> For KAM User login using below credentials :
+```json
+{
+    "mobile" : "9999999992",
+    "password": "password"
+}
+```
 
 ## Conclusion
 
