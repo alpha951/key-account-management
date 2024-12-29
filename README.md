@@ -98,7 +98,6 @@ Otherwise you can use maven commands to install the dependencies for this you ne
   ```
 
 
-
 ## Running Instructions
 
 Once the application is set up:
@@ -131,6 +130,13 @@ For those APIs which perform some kind of Data manipulation operations use some 
     "password": "password"
 }
 ```
+
+## Running test suit
+You can run the test suit using IntelliJ run tests button or using below command.
+```bash
+    mvn test
+```
+
 
 ## Conclusion
 
