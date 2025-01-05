@@ -2,6 +2,8 @@ package org.kamsystem.kamuser.service;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.kamsystem.audit.model.KamAuditLog;
+import org.kamsystem.audit.service.IAuditService;
 import org.kamsystem.authentication.utils.PasswordUtil;
 import org.kamsystem.common.utils.MobileUtils;
 import org.kamsystem.kamuser.dao.KamUser;
@@ -26,6 +28,7 @@ public class KamUserService implements IKamUserService {
     private final ILeadRepository leadRepository;
     private final IRestaurantRepository restaurantRepository;
     private final IPocRepository pocRepository;
+    private final IAuditService auditService;
     private final PasswordUtil passwordUtil;
 
     @Override
@@ -59,6 +62,9 @@ public class KamUserService implements IKamUserService {
         leadRepository.updateLeadCreator(updateKamRequest.getOldKamId(), updateKamRequest.getNewKamId());
         pocRepository.updatePocCreator(updateKamRequest.getOldKamId(), updateKamRequest.getNewKamId());
         restaurantRepository.updateRestaurantCreator(updateKamRequest.getOldKamId(), updateKamRequest.getNewKamId());
+
+        auditService.logKamChange(new KamAuditLog(updateKamRequest.getOldKamId(),
+            updateKamRequest.getNewKamId(), leads, pocs, restaurants));
 
         return new UpdateKamResponse(leads.size(), pocs.size(), restaurants.size());
     }
