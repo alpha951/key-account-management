@@ -121,12 +121,12 @@ CREATE TABLE public.kam_system_metrics
 (
     id                BIGSERIAL PRIMARY KEY,
     metric_name       VARCHAR(50) NOT NULL,
-    metric_value      NUMERIC     NOT NULL,
+    metric_value      NUMERIC     NULL,
     metric_value_type VARCHAR(50) NOT NULL,
     timeframe         VARCHAR(50) NOT NULL,
     year              BIGINT      NOT NULL,
-    month             BIGINT      NULL,
-    day               BIGINT      NULL,
+    month             BIGINT      NOT NULL,
+    day               BIGINT      NOT NULL,
     created_at        TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()
 );
 
