@@ -16,7 +16,11 @@ public class AnalyticsRepository implements IAnalyticsRepository {
 
     private static final String AVERAGE_ORDER_VALUE_FOR_TIMEFRAME =
         """
-            SELECT SUM(amount) / COUNT(order_id) AS average_order_value
+            SELECT
+                CASE
+                    WHEN COUNT(order_id) = 0 THEN 0
+                    ELSE SUM(amount) / COUNT(order_id)
+                END AS average_order_value
             FROM orders
             WHERE created_at BETWEEN :startDate AND :endDate
             """;
@@ -31,7 +35,11 @@ public class AnalyticsRepository implements IAnalyticsRepository {
 
     private static final String INTERACTIONS_PER_LEAD_FOR_TIMEFRAME =
         """
-            SELECT (CAST(COUNT(it.id) AS FLOAT) / COUNT(DISTINCT it.lead_id)) AS interactions_per_lead
+            SELECT
+                CASE
+                    WHEN COUNT(DISTINCT it.lead_id) = 0 THEN 0
+                    ELSE (CAST(COUNT(it.id) AS FLOAT) / COUNT(DISTINCT it.lead_id))
+                END AS interactions_per_lead
             FROM interaction it
             INNER JOIN lead ld ON it.lead_id = ld.lead_id
             WHERE it.created_at BETWEEN :startDate AND :endDate
@@ -39,21 +47,33 @@ public class AnalyticsRepository implements IAnalyticsRepository {
 
     private static final String INTERACTIONS_PER_KAM_FOR_TIMEFRAME =
         """
-            SELECT (CAST(COUNT(id) AS FLOAT) / COUNT(DISTINCT caller_id)) AS interactions_per_kam
+            SELECT
+                CASE
+                    WHEN COUNT(DISTINCT caller_id) = 0 THEN 0
+                    ELSE (CAST(COUNT(id) AS FLOAT) / COUNT(DISTINCT caller_id))
+                END AS interactions_per_kam
             FROM interaction
             WHERE created_at BETWEEN :startDate AND :endDate
             """;
 
     private static final String INTERACTIONS_PER_POC_FOR_TIMEFRAME =
         """
-            SELECT (CAST(COUNT(id) AS FLOAT) / COUNT(DISTINCT poc_id)) AS interactions_per_poc
+            SELECT
+                CASE
+                    WHEN COUNT(DISTINCT poc_id) = 0 THEN 0
+                    ELSE (CAST(COUNT(id) AS FLOAT) / COUNT(DISTINCT poc_id))
+                END AS interactions_per_poc
             FROM interaction
             WHERE created_at BETWEEN :startDate AND :endDate
             """;
 
     private static final String INTERACTION_SUCCESS_RATE_FOR_TIMEFRAME =
         """
-            SELECT (CAST(COUNT(order_id) AS FLOAT) / COUNT(interaction_id)) * 100 AS interaction_success_rate
+            SELECT
+                CASE
+                    WHEN COUNT(interaction_id) = 0 THEN 0
+                    ELSE (CAST(COUNT(order_id) AS FLOAT) / COUNT(interaction_id)) * 100
+                END AS interaction_success_rate
             FROM orders
             INNER JOIN interaction ON orders.interaction_id = interaction.id
             WHERE orders.created_at BETWEEN :startDate AND :endDate
@@ -61,14 +81,22 @@ public class AnalyticsRepository implements IAnalyticsRepository {
 
     private static final String REVENUE_PER_KAM_FOR_TIMEFRAME =
         """
-            SELECT (SUM(amount) / COUNT(DISTINCT created_by)) AS revenue_per_kam
+            SELECT
+                CASE
+                    WHEN COUNT(DISTINCT created_by) = 0 THEN 0
+                    ELSE (SUM(amount) / COUNT(DISTINCT created_by))
+                END AS revenue_per_kam
             FROM orders
             WHERE created_at BETWEEN :startDate AND :endDate
             """;
 
     private static final String REVENUE_PER_RESTAURANT_FOR_TIMEFRAME =
         """
-            SELECT (SUM(amount) / COUNT(DISTINCT restaurant_id)) AS revenue_per_restaurant
+            SELECT
+                CASE
+                    WHEN COUNT(DISTINCT restaurant_id) = 0 THEN 0
+                    ELSE (SUM(amount) / COUNT(DISTINCT restaurant_id))
+                END AS revenue_per_restaurant
             FROM orders
             WHERE created_at BETWEEN :startDate AND :endDate
             """;
