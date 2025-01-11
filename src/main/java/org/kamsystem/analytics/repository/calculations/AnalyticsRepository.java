@@ -27,8 +27,12 @@ public class AnalyticsRepository implements IAnalyticsRepository {
 
     private static final String LEAD_CONVERSION_RATE_FOR_TIMEFRAME =
         """
-            SELECT (CAST(SUM(CASE WHEN lead_status = 'CONVERTED' THEN 1 ELSE 0 END) AS FLOAT)
-            / COUNT(lead_id)) * 100 AS lead_conversion_rate
+            SELECT
+                COALESCE(
+                    (CAST(SUM(CASE WHEN lead_status = 'CONVERTED' THEN 1 ELSE 0 END) AS FLOAT)
+                     / NULLIF(COUNT(lead_id), 0)) * 100,
+                    0
+                ) AS lead_conversion_rate
             FROM lead
             WHERE created_at BETWEEN :startDate AND :endDate
             """;
