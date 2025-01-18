@@ -26,9 +26,8 @@ Key features of the system include:
 Follow these steps to set up the project locally:
 
 1. **Clone the repository**:
-    To protect the codebase from public access I've used a personal access token (PAT) for cloning the repository. This token provides read only access to the repository. You can use the following command to clone the repository: 
    ```bash
-   git clone https://alpha951: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@github.com/alpha951/key-account-management.git
+   git clone https://github.com/alpha951/key-account-management.git
    cd key-account-management
    ```
 
@@ -104,25 +103,6 @@ Once the application is set up:
 
 - The application will be available at `http://localhost:8080/`.
 - To test various functionalities, you can interact with the provided APIs via tools like **Postman** or **cURL**.
-
-
-## Access Deployed Database ⚠️⚠️⚠️
-I've exposed the deployed postgres instance on tcp using pgadmin. Follow these steps to access the deployed database instance:
-- Go to https://psql.keshavcarpenter.tech
-- Use the following credentials to login:
-    - **Username**: admin
-    - **Password**: udaan
-  
-- Use below credentials to login in pgadmin
-- **Username**: hello@udaan.com
-- **Password**: udaan.com
-
-To access the db in the sidebar click on the server and then click on the database to view the schema and data.
-Or you can
-- Now login to the postgres server using these details
-- **Host**: http://localhost:6432
-- **Username**: root
-- **Password**: root
 
 ## Database Schema
 ![Database schema](/docs/database-schema.png)
